@@ -1,13 +1,19 @@
-import { Pool, QueryConfig, QueryResult } from "pg";
+import { Pool } from "pg";
 import { env } from "./env.js";
 
+// Postgres connection pool shared across the backend. Using a single pool
+// allows efficient reuse of connections and is safe for concurrent request handling.
 export const pool = new Pool({
   connectionString: env.DATABASE_URL,
   ssl: env.NODE_ENV === "production" ? { rejectUnauthorized: false } : undefined
 });
 
-export async function query<T = any>(text: string | QueryConfig<any[]>, params?: any[]): Promise<QueryResult<T>> {
-  return pool.query<T>(text as any, params);
+/**
+ * Simple wrapper around pg.Pool.query with a generic return type.
+ * Use this throughout routes to run SQL queries.
+ */
+export async function query<T = any>(text: string | any, params?: any[]): Promise<any> {
+  return pool.query(text as any, params);
 }
 
 

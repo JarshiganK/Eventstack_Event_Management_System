@@ -23,14 +23,7 @@ VALUES (
 ON CONFLICT (id) DO NOTHING;
 
 -- demo organizer and regular user
-INSERT INTO users (id, email, password_hash, role)
-VALUES
-  ('corganizer000000000000000000', 'organizer@example.com', '1234', 'ORGANIZER')
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO users (id, email, password_hash, role)
-VALUES ('cuserdemo0000000000000000000', 'user@example.com', '$2a$10$mnopqrstuvwxyzabcdefghi', 'USER')
-ON CONFLICT (id) DO NOTHING;
+-- demo organizer and regular user are created by scripts/create_demo_users.ts to ensure proper password hashing.
 
 -- second event
 INSERT INTO events (id, title, summary, starts_at, ends_at, venue_id, categories, searchable)

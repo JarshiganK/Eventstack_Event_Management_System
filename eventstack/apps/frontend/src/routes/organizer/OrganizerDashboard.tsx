@@ -21,6 +21,7 @@ function formatCategoryLabel(category: string) {
     .join(' ')
 }
 
+// Organizer dashboard: lists events the organizer can manage and shows simple stats.
 export default function OrganizerDashboard() {
   const [events, setEvents] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(true)

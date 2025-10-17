@@ -24,6 +24,7 @@ export default function OrganizerLogin() {
     }
   }, [navigate])
 
+  // Helper to extract a useful message from an Error or API response body
   function resolveErrorMessage(err: unknown, fallback: string) {
     if (err instanceof Error && err.message) {
       try {
@@ -44,7 +45,9 @@ export default function OrganizerLogin() {
     setLoading(true)
 
     try {
-      let userRole: KnownRole
+  // Attempt register or login depending on the current mode. On success
+  // save token and navigate to organizer dashboard.
+  let userRole: KnownRole
       if (signupMode) {
         const { token, user } = await api.register(email, password, 'ORGANIZER')
         userRole = user.role as KnownRole
