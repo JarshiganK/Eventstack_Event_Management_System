@@ -21,14 +21,12 @@ export async function uploadFile(file: File) {
   return res.json() as Promise<{ url: string }>
 }
 
-export async function search(queryStr: string, filters?: { category?: string; zone?: string; subzone?: string }) {
+export async function search(queryStr: string, filters?: { category?: string }) {
   const q = (queryStr || '').trim()
   if (!q) return { results: [] as any[] }
   const qs = new URLSearchParams()
   qs.set('query', q)
   if (filters?.category) qs.set('category', filters.category)
-  if (filters?.zone) qs.set('zone', filters.zone)
-  if (filters?.subzone) qs.set('subzone', filters.subzone)
   return http<{ results: any[] }>(`/search?${qs.toString()}`)
 }
 

@@ -32,7 +32,7 @@ export default async function eventRoutes(app: FastifyInstance) {
     }
     const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
     const { rows } = await query(
-      `SELECT e.*, v.name AS venue_name, v.lat, v.lng, v.zone, v.subzone,
+      `SELECT e.*, v.name AS venue_name, v.lat, v.lng,
               (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url
        FROM events e
        LEFT JOIN venues v ON v.id=e.venue_id
@@ -48,14 +48,14 @@ export default async function eventRoutes(app: FastifyInstance) {
       endsAt: iso(r.ends_at),
       categories: r.categories || [],
       coverUrl: r.cover_url || undefined,
-      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng, zone: r.zone || undefined, subzone: r.subzone || undefined }
+      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng }
     }));
   });
 
   app.get<{ Params: { id: string } }>("/events/:id", async (req, reply) => {
     const { id } = req.params;
     const { rows } = await query(
-      `SELECT e.*, v.name AS venue_name, v.lat, v.lng, v.zone, v.subzone
+      `SELECT e.*, v.name AS venue_name, v.lat, v.lng
        FROM events e LEFT JOIN venues v ON v.id=e.venue_id WHERE e.id=$1`,
       [id]
     );
@@ -73,7 +73,7 @@ export default async function eventRoutes(app: FastifyInstance) {
       endsAt: iso(r.ends_at),
       categories: r.categories || [],
       images: img,
-      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng, zone: r.zone || undefined, subzone: r.subzone || undefined }
+      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng }
     };
   });
 

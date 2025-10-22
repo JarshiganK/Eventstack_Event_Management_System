@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { api } from '../../lib/api'
 
-type Venue = { id: string; name: string; address?: string; lat: number; lng: number; zone?: string; subzone?: string }
+type Venue = { id: string; name: string; address?: string; lat: number; lng: number }
 
 export default function VenueList() {
   const [venues, setVenues] = useState<Venue[]>([])
-  const [form, setForm] = useState<Omit<Venue, 'id'> & { id?: string }>({ name: '', address: '', lat: 0, lng: 0, zone: '', subzone: '' })
+  const [form, setForm] = useState<Omit<Venue, 'id'> & { id?: string }>({ name: '', address: '', lat: 0, lng: 0 })
 
   async function load() { setVenues(await api.listVenues()) }
   useEffect(() => { load() }, [])
@@ -14,7 +14,7 @@ export default function VenueList() {
     e.preventDefault()
     if (form.id) await api.updateVenue(form.id, form as any)
     else await api.createVenue(form as any)
-    setForm({ name: '', address: '', lat: 0, lng: 0, zone: '', subzone: '' })
+  setForm({ name: '', address: '', lat: 0, lng: 0 })
     await load()
   }
 
@@ -29,8 +29,7 @@ export default function VenueList() {
         <input placeholder="Address" value={form.address||''} onChange={e=>setForm({...form,address:e.target.value})} />
         <input placeholder="Lat" type="number" step="any" value={form.lat} onChange={e=>setForm({...form,lat:parseFloat(e.target.value)})} required />
         <input placeholder="Lng" type="number" step="any" value={form.lng} onChange={e=>setForm({...form,lng:parseFloat(e.target.value)})} required />
-        <input placeholder="Zone" value={form.zone||''} onChange={e=>setForm({...form,zone:e.target.value})} />
-        <input placeholder="Subzone" value={form.subzone||''} onChange={e=>setForm({...form,subzone:e.target.value})} />
+        {/* zone/subzone removed */}
         <button type="submit">{form.id ? 'Update' : 'Create'}</button>
       </form>
       <div style={{marginTop:16}}>
@@ -38,7 +37,7 @@ export default function VenueList() {
           <div key={v.id} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid #eee'}}>
             <div>
               <div><strong>{v.name}</strong></div>
-              <div style={{fontSize:12,color:'#666'}}>{v.zone}{v.subzone?`/${v.subzone}`:''}</div>
+              <div style={{fontSize:12,color:'#666'}}>{/* zone/subzone removed */}</div>
             </div>
             <div>
               <button onClick={()=>edit(v)}>Edit</button>

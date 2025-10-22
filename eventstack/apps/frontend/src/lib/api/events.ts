@@ -1,12 +1,10 @@
 import { http } from "../http"
 
-export async function listEvents(params?: { from?: string; to?: string; category?: string; zone?: string; subzone?: string }) {
+export async function listEvents(params?: { from?: string; to?: string; category?: string }) {
   const qs = new URLSearchParams()
   if (params?.from) qs.set('from', params.from)
   if (params?.to) qs.set('to', params.to)
   if (params?.category) qs.set('category', params.category)
-  if (params?.zone) qs.set('zone', params.zone)
-  if (params?.subzone) qs.set('subzone', params.subzone)
   const q = qs.toString()
   return http<any[]>(`/events${q ? `?${q}` : ''}`)
 }

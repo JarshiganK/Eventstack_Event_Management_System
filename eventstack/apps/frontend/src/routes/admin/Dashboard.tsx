@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import EventCard from '../../components/EventCard'
 import { api } from '../../lib/api'
 
@@ -11,7 +11,7 @@ type EventSummary = {
   coverUrl?: string
   categories?: string[]
   images?: Array<{ url: string }>
-  venue?: { name?: string; zone?: string; subzone?: string }
+  venue?: { name?: string }
 }
 
 const normalize = (value: string) =>
@@ -25,8 +25,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('')
-  const [activeZone, setActiveZone] = useState('')
-  const [activeSubzone, setActiveSubzone] = useState('')
+  
 
   useEffect(() => {
     setLoading(true)
@@ -43,30 +42,14 @@ export default function Dashboard() {
     return Array.from(set).sort((a, b) => a.localeCompare(b))
   }, [events])
 
-  const zones = useMemo(() => {
-    const set = new Set<string>()
-    events.forEach(event => {
-      if (event.venue?.zone) set.add(event.venue.zone)
-    })
-    return Array.from(set).sort((a, b) => a.localeCompare(b))
-  }, [events])
-
-  const subzones = useMemo(() => {
-    const set = new Set<string>()
-    events.forEach(event => {
-      if (event.venue?.subzone) set.add(event.venue.subzone)
-    })
-    return Array.from(set).sort((a, b) => a.localeCompare(b))
-  }, [events])
+  
 
   const filteredEvents = useMemo(() => {
     return events.filter(event => {
       const matchCategory = activeCategory ? event.categories?.includes(activeCategory) : true
-      const matchZone = activeZone ? event.venue?.zone === activeZone : true
-      const matchSubzone = activeSubzone ? event.venue?.subzone === activeSubzone : true
-      return matchCategory && matchZone && matchSubzone
+      return matchCategory
     })
-  }, [events, activeCategory, activeZone, activeSubzone])
+  }, [events, activeCategory])
 
   const upcomingCount = useMemo(() => {
     const now = Date.now()
@@ -76,7 +59,7 @@ export default function Dashboard() {
     }).length
   }, [events])
 
-  const toggle = (value: string, setter: (next: string) => void) => {
+  const toggle = (value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
     setter(current => (current === value ? '' : value))
   }
 
@@ -85,8 +68,8 @@ export default function Dashboard() {
       <header className="stack">
         <span className="eyebrow">Admin overview</span>
         <h1 className="hero-title">Dashboard</h1>
-        <p className="hero-copy">
-          Monitor listings, filter by location or category, and keep tabs on what is live right now.
+          <p className="hero-copy">
+          Monitor listings and filter by category to focus on specific content.
         </p>
       </header>
 
@@ -123,42 +106,7 @@ export default function Dashboard() {
             </div>
           </div>
         ) : null}
-        {zones.length ? (
-          <div>
-            <span className="eyebrow">Zones</span>
-            <div className="chips">
-              {zones.map(zone => (
-                <button
-                  key={zone}
-                  type="button"
-                  className={`chip${activeZone === zone ? ' chip--on' : ''}`}
-                  onClick={() => toggle(zone, setActiveZone)}
-                  aria-pressed={activeZone === zone}
-                >
-                  {normalize(zone)}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
-        {subzones.length ? (
-          <div>
-            <span className="eyebrow">Subzones</span>
-            <div className="chips">
-              {subzones.map(value => (
-                <button
-                  key={value}
-                  type="button"
-                  className={`chip${activeSubzone === value ? ' chip--on' : ''}`}
-                  onClick={() => toggle(value, setActiveSubzone)}
-                  aria-pressed={activeSubzone === value}
-                >
-                  {normalize(value)}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
+        {/* zones/subzones removed - only category chips remain */}
       </section>
 
       <section className="stack" aria-live="polite">

@@ -10,7 +10,7 @@ type EventCardProps = {
     coverUrl?: string
     images?: Array<{ url: string }>
     categories?: string[]
-    venue?: { name?: string; zone?: string; subzone?: string }
+  venue?: { name?: string }
   }
 }
 
@@ -44,9 +44,7 @@ const EventCardInner = ({ event }: EventCardProps) => {
   const artwork = event.coverUrl || event.images?.[0]?.url || ''
   const primaryCategory = event.categories?.[0]
   const schedule = formatDateRange(event.startsAt, event.endsAt)
-  const venueLabel = [event.venue?.name, event.venue?.zone, event.venue?.subzone]
-    .filter(Boolean)
-    .join(' · ')
+  const venueLabel = [event.venue?.name].filter(Boolean).join(' · ')
 
   return (
     <>

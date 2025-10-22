@@ -14,7 +14,7 @@ type EventSummary = {
   coverUrl?: string
   images?: Array<{ url: string }>
   categories?: string[]
-  venue?: { name?: string; zone?: string; subzone?: string }
+  venue?: { name?: string }
 }
 
 const HOME_SEARCH_ID = 'home-search'
@@ -36,8 +36,7 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchValue, setSearchValue] = useState('')
   const [searchCategory, setSearchCategory] = useState('')
-  const [searchZone, setSearchZone] = useState('')
-  const [searchSubzone, setSearchSubzone] = useState('')
+  
   const [searchResults, setSearchResults] = useState<EventSummary[]>([])
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchError, setSearchError] = useState('')
@@ -91,9 +90,7 @@ export default function Home() {
       setSearchLoading(true)
       try {
         const res = await api.search(term, {
-          category: searchCategory.trim() || undefined,
-          zone: searchZone.trim() || undefined,
-          subzone: searchSubzone.trim() || undefined,
+          category: searchCategory.trim() || undefined
         })
         setSearchResults(res.results ?? [])
         setSearchError('')
@@ -104,7 +101,7 @@ export default function Home() {
         setSearchLoading(false)
       }
     },
-    [searchCategory, searchZone, searchSubzone]
+    [searchCategory]
   )
 
   useDebounce(searchValue, 320, runSearch)
@@ -253,24 +250,7 @@ export default function Home() {
                   onChange={event => setSearchCategory(event.target.value)}
                 />
               </label>
-              <label className="field">
-                <span>Zone</span>
-                <input
-                  className="form-input"
-                  placeholder="Eg. Downtown"
-                  value={searchZone}
-                  onChange={event => setSearchZone(event.target.value)}
-                />
-              </label>
-              <label className="field">
-                <span>Subzone</span>
-                <input
-                  className="form-input"
-                  placeholder="Eg. Riverside"
-                  value={searchSubzone}
-                  onChange={event => setSearchSubzone(event.target.value)}
-                />
-              </label>
+              {/* zone/subzone removed */}
             </div>
           </form>
           {searchError ? <div className="alert alert--danger">{searchError}</div> : null}

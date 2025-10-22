@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import EventCard from '../components/EventCard'
 import { api } from '../lib/api'
 import { useDebounce } from '../lib/debounce'
@@ -12,7 +12,7 @@ type EventSummary = {
   coverUrl?: string
   images?: Array<{ url: string }>
   categories?: string[]
-  venue?: { name?: string; zone?: string; subzone?: string }
+  venue?: { name?: string }
 }
 
 const normalize = (value: string) =>
@@ -25,8 +25,7 @@ const normalize = (value: string) =>
 export default function Search() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
-  const [zone, setZone] = useState('')
-  const [subzone, setSubzone] = useState('')
+  
   const [results, setResults] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -49,21 +48,7 @@ export default function Search() {
     return Array.from(set).sort((a, b) => a.localeCompare(b))
   }, [allEvents])
 
-  const zones = useMemo(() => {
-    const set = new Set<string>()
-    allEvents.forEach(event => {
-      if (event.venue?.zone) set.add(event.venue.zone)
-    })
-    return Array.from(set).sort((a, b) => a.localeCompare(b))
-  }, [allEvents])
-
-  const subzones = useMemo(() => {
-    const set = new Set<string>()
-    allEvents.forEach(event => {
-      if (event.venue?.subzone) set.add(event.venue.subzone)
-    })
-    return Array.from(set).sort((a, b) => a.localeCompare(b))
-  }, [allEvents])
+  
 
   const run = useCallback(
     async (term: string) => {
@@ -78,9 +63,7 @@ export default function Search() {
       setLoading(true)
       try {
         const res = await api.search(trimmed, {
-          category: category || undefined,
-          zone: zone || undefined,
-          subzone: subzone || undefined,
+          category: category || undefined
         })
         setResults(res.results ?? [])
         setError('')
@@ -91,7 +74,7 @@ export default function Search() {
         setLoading(false)
       }
     },
-    [category, zone, subzone]
+    [category]
   )
 
   useDebounce(query, 320, run)
@@ -101,7 +84,7 @@ export default function Search() {
     run(query)
   }
 
-  const onSelectChip = (value: string, setter: (v: string) => void) => {
+  const onSelectChip = (value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
     setter(prev => (prev === value ? '' : value))
   }
 
@@ -112,8 +95,8 @@ export default function Search() {
         <h1 id="search-heading" className="hero-title">
           Search events
         </h1>
-        <p className="hero-copy">
-          Filter by category, zone or subzone to pinpoint the perfect experience. Results update as you type.
+          <p className="hero-copy">
+          Filter by category to pinpoint the perfect experience. Results update as you type.
         </p>
         <form className="search-panel__form" onSubmit={onSubmit}>
           <div className="search-panel__bar">
@@ -148,42 +131,7 @@ export default function Search() {
               </div>
             </div>
           ) : null}
-          {zones.length ? (
-            <div>
-              <span className="eyebrow">Zones</span>
-              <div className="chips">
-                {zones.map(value => (
-                  <button
-                    key={value}
-                    type="button"
-                    className={`chip${zone === value ? ' chip--on' : ''}`}
-                    onClick={() => onSelectChip(value, setZone)}
-                    aria-pressed={zone === value}
-                  >
-                    {normalize(value)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-          {subzones.length ? (
-            <div>
-              <span className="eyebrow">Subzones</span>
-              <div className="chips">
-                {subzones.map(value => (
-                  <button
-                    key={value}
-                    type="button"
-                    className={`chip${subzone === value ? ' chip--on' : ''}`}
-                    onClick={() => onSelectChip(value, setSubzone)}
-                    aria-pressed={subzone === value}
-                  >
-                    {normalize(value)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
+          {/* zones/subzones removed - only category chips remain */}
         </div>
       </header>
 

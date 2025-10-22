@@ -18,8 +18,6 @@ CREATE TABLE IF NOT EXISTS venues (
   address text,
   lat double precision NOT NULL,
   lng double precision NOT NULL,
-  zone text,
-  subzone text,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
@@ -70,8 +68,7 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS idx_venue_zone ON venues(zone);
-CREATE INDEX IF NOT EXISTS idx_venue_subzone ON venues(subzone);
+-- (zone/subzone removed)
 CREATE INDEX IF NOT EXISTS idx_notifications_user_created ON notifications(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_events_starts_at ON events(starts_at);
 CREATE INDEX IF NOT EXISTS idx_events_categories ON events USING GIN (categories);

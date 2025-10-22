@@ -14,7 +14,7 @@ type BookmarkEvent = {
   coverUrl?: string
   categories?: string[]
   images?: Array<{ url: string }>
-  venue?: { name?: string; zone?: string; subzone?: string }
+  venue?: { name?: string }
 }
 
 export default function Bookmarks() {

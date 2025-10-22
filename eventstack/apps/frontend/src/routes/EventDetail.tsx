@@ -12,7 +12,7 @@ type EventDetailData = {
   endsAt?: string
   coverUrl?: string
   categories?: string[]
-  venue?: { name?: string; zone?: string; subzone?: string }
+  venue?: { name?: string }
   images?: Array<{ url: string }>
 }
 
@@ -94,9 +94,7 @@ export default function EventDetail() {
 
   const handleDirections = () => {
     if (!event?.venue?.name) return
-    const query = encodeURIComponent(
-      [event.venue.name, event.venue.zone, event.venue.subzone].filter(Boolean).join(' · ')
-    )
+    const query = encodeURIComponent([event.venue.name].filter(Boolean).join(' · '))
     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank', 'noopener')
   }
 
@@ -180,9 +178,7 @@ export default function EventDetail() {
                 <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                   <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5Z" />
                 </svg>
-                <span>
-                  {[event.venue.name, event.venue.zone, event.venue.subzone].filter(Boolean).join(' · ')}
-                </span>
+                <span>{event.venue.name}</span>
               </div>
             ) : null}
           </div>
@@ -239,8 +235,7 @@ export default function EventDetail() {
             <h3>Venue</h3>
             <div className="meta">
               <span>{event.venue?.name ?? 'To be announced'}</span>
-              {event.venue?.zone ? <span>{event.venue.zone}</span> : null}
-              {event.venue?.subzone ? <span>{event.venue.subzone}</span> : null}
+              {/* zone/subzone removed */}
             </div>
           </div>
         </div>

@@ -5,9 +5,7 @@ import { query } from "../db.js";
 export default async function searchRoutes(app: FastifyInstance) {
   const qSchema = z.object({
     query: z.string().optional().default(""),
-    category: z.string().optional().default(""),
-    zone: z.string().optional().default(""),
-    subzone: z.string().optional().default("")
+    category: z.string().optional().default("")
   });
 
   app.get("/search", async (req) => {
@@ -23,17 +21,9 @@ export default async function searchRoutes(app: FastifyInstance) {
       params.push(q.category);
       where += ` AND $${params.length} = ANY(e.categories)`;
     }
-    if (q.zone) {
-      params.push(q.zone);
-      where += ` AND v.zone = $${params.length}`;
-    }
-    if (q.subzone) {
-      params.push(q.subzone);
-      where += ` AND v.subzone = $${params.length}`;
-    }
 
     const { rows } = await query(
-      `SELECT e.*, v.id as venue_id, v.name as venue_name, v.lat, v.lng, v.zone, v.subzone,
+      `SELECT e.*, v.id as venue_id, v.name as venue_name, v.lat, v.lng,
               (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url
        FROM events e
        LEFT JOIN venues v ON v.id=e.venue_id
@@ -50,7 +40,7 @@ export default async function searchRoutes(app: FastifyInstance) {
       endsAt: new Date(r.ends_at).toISOString(),
       categories: r.categories || [],
       coverUrl: r.cover_url || undefined,
-      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng, zone: r.zone || undefined, subzone: r.subzone || undefined }
+      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng }
     }));
     return { results };
   });

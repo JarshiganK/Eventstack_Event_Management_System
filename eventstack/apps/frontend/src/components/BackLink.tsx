@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 type Props = {
   fallback?: string
@@ -15,13 +15,19 @@ export default function BackLink({
   className = '',
 }: Props) {
   const navigate = useNavigate()
+  const location = useLocation()
 
   function handleClick() {
-    if (window.history.length > 2) {
-      navigate(-1)
-      return
-    }
-    navigate(fallback, { replace: true })
+    const currentPath = location.pathname
+    // Try to go back first. In some environments history length checks are unreliable,
+    // so we attempt a back navigation then fall back to the provided route if nothing changed.
+    navigate(-1)
+    // If the pathname hasn't changed after a short delay, navigate to fallback.
+    setTimeout(() => {
+      if (window.location.pathname === currentPath) {
+        navigate(fallback, { replace: true })
+      }
+    }, 150)
   }
 
   return (
