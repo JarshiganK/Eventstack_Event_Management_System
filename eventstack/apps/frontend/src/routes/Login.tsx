@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../lib/api'
 import { setToken } from '../lib/auth'
@@ -49,7 +49,7 @@ const ROLE_OPTIONS: Array<{
   value: AccountRole
   label: string
   description: string
-  icon: JSX.Element
+  icon: React.ReactElement
   className: string
 }> = [
   {

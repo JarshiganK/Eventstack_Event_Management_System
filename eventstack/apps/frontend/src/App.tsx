@@ -1,9 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './routes/Home'
-import Search from './routes/Search'
 import EventDetail from './routes/EventDetail'
 import Bookmarks from './routes/Bookmarks'
-import Notifications from './routes/Notifications'
 import Login from './routes/Login'
 import Profile from './routes/Profile'
 import AdminLogin from './routes/admin/AdminLogin'
@@ -23,7 +21,6 @@ export default function App() {
           <Route path="/search" element={<Navigate to="/" replace />} />
           <Route path="/event/:id" element={<EventDetail />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
-          <Route path="/notifications" element={<Notifications />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin/login" element={<AdminLogin />} />
