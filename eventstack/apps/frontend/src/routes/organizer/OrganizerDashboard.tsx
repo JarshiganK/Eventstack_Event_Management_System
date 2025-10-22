@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import BackLink from '../../components/BackLink'
 import { api } from '../../lib/api'
+import { getHomeCategoryFiltersVisible, setHomeCategoryFiltersVisible } from '../../lib/homeFiltersVisibility'
 
 type EventSummary = {
   id: string
@@ -27,6 +28,8 @@ export default function OrganizerDashboard() {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({ totalEvents: 0, upcoming: 0 })
   const [activeFilter, setActiveFilter] = useState<string>(ALL_FILTER)
+  const [filtersVisible, setFiltersVisible] = useState(false)
+  const [homeFiltersVisible, setHomeFiltersVisible] = useState(() => getHomeCategoryFiltersVisible())
 
   async function load() {
     setLoading(true)
@@ -76,6 +79,14 @@ export default function OrganizerDashboard() {
     await load()
   }
 
+  function toggleHomeFilters() {
+    setHomeFiltersVisible(current => {
+      const next = !current
+      setHomeCategoryFiltersVisible(next)
+      return next
+    })
+  }
+
   return (
     <div className="page dashboard-page">
       <BackLink className="mb-4" />
@@ -109,13 +120,40 @@ export default function OrganizerDashboard() {
       <section className="dashboard-section">
         <div className="section-heading">
           <h2>Your events</h2>
-          <button type="button" className="btn btn-ghost" onClick={() => void load()}>
-            Refresh
-          </button>
+          <div>
+            <button
+              type="button"
+              className="btn btn-outline me-2"
+              aria-pressed={homeFiltersVisible}
+              onClick={toggleHomeFilters}
+            >
+              {homeFiltersVisible ? 'Hide filters on home' : 'Show filters on home'}
+            </button>
+            {availableCategories.length ? (
+              <button
+                type="button"
+                className="btn btn-ghost me-2"
+                aria-controls="dashboard-category-filters"
+                aria-expanded={filtersVisible}
+                onClick={() =>
+                  setFiltersVisible(prev => {
+                    const next = !prev
+                    if (!next) setActiveFilter(ALL_FILTER)
+                    return next
+                  })
+                }
+              >
+                {filtersVisible ? 'Hide category filters' : 'Show category filters'}
+              </button>
+            ) : null}
+            <button type="button" className="btn btn-ghost" onClick={() => void load()}>
+              Refresh
+            </button>
+          </div>
         </div>
 
-        {availableCategories.length ? (
-          <div className="dashboard-filters surface-card">
+        {availableCategories.length && filtersVisible ? (
+          <div id="dashboard-category-filters" className="dashboard-filters surface-card">
             <div className="dashboard-filters__header">
               <span>Filter by category</span>
               <span className="dashboard-filters__tagline">

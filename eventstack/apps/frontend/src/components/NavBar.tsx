@@ -6,12 +6,6 @@ const HomeIcon = (
   </svg>
 )
 
-const SearchIcon = (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M15.5 13.5h-.8l-.27-.26a6.5 6.5 0 1 0-.94.94l.26.27v.8l5 5L20.5 18l-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z" />
-  </svg>
-)
-
 const BookmarkIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-6-3-6 3Z" />
@@ -38,15 +32,6 @@ export default function NavBar() {
       </NavLink>
 
       <NavLink
-        to="/search"
-        aria-label="Search events"
-        className={({ isActive }) => `navbtn${isActive ? ' navbtn--active' : ''}`}
-      >
-        {SearchIcon}
-        <span>Search</span>
-      </NavLink>
-
-      <NavLink
         to="/bookmarks"
         aria-label="Bookmarks"
         className={({ isActive }) => `navbtn${isActive ? ' navbtn--active' : ''}`}
@@ -66,4 +51,3 @@ export default function NavBar() {
     </nav>
   )
 }
-

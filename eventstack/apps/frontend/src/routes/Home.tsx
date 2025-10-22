@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import EventCard from '../components/EventCard'
 import { api } from '../lib/api'
 import { useDebounce } from '../lib/debounce'
+import { HOME_CATEGORY_FILTERS_VISIBILITY, getHomeCategoryFiltersVisible } from '../lib/homeFiltersVisibility'
 
 type EventSummary = {
   id?: string
@@ -30,6 +31,7 @@ export default function Home() {
   const [events, setEvents] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState<string>(ALL)
+  const [showCategoryFilters, setShowCategoryFilters] = useState(() => getHomeCategoryFiltersVisible())
 
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchValue, setSearchValue] = useState('')
@@ -114,6 +116,36 @@ export default function Home() {
     }
   }, [searchParams])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleVisibilityEvent = (event: Event) => {
+      const detail = (event as CustomEvent<{ value?: boolean }>).detail
+      if (typeof detail?.value === 'boolean') {
+        setShowCategoryFilters(detail.value)
+      }
+    }
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== HOME_CATEGORY_FILTERS_VISIBILITY.STORAGE_KEY) return
+      setShowCategoryFilters(event.newValue !== 'false')
+    }
+
+    window.addEventListener(HOME_CATEGORY_FILTERS_VISIBILITY.EVENT, handleVisibilityEvent)
+    window.addEventListener('storage', handleStorage)
+
+    return () => {
+      window.removeEventListener(HOME_CATEGORY_FILTERS_VISIBILITY.EVENT, handleVisibilityEvent)
+      window.removeEventListener('storage', handleStorage)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!showCategoryFilters) {
+      setActiveCategory(ALL)
+    }
+  }, [showCategoryFilters])
+
   const handleSubmitSearch = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
@@ -167,27 +199,29 @@ export default function Home() {
         <div className="section-heading">
           <h2 id="category-heading">Browse by vibe</h2>
         </div>
-        <div className="chips" role="tablist" aria-label="Filter by category">
-          <button
-            type="button"
-            className={`chip${activeCategory === ALL ? ' chip--on' : ''}`}
-            onClick={() => setActiveCategory(ALL)}
-            aria-pressed={activeCategory === ALL}
-          >
-            All vibes
-          </button>
-          {categories.map(category => (
+        {showCategoryFilters ? (
+          <div id="home-category-filters" className="chips" role="tablist" aria-label="Filter by category">
             <button
-              key={category}
               type="button"
-              className={`chip${activeCategory === category ? ' chip--on' : ''}`}
-              onClick={() => setActiveCategory(category)}
-              aria-pressed={activeCategory === category}
+              className={`chip${activeCategory === ALL ? ' chip--on' : ''}`}
+              onClick={() => setActiveCategory(ALL)}
+              aria-pressed={activeCategory === ALL}
             >
-              {normalizeCategory(category)}
+              All vibes
             </button>
-          ))}
-        </div>
+            {categories.map(category => (
+              <button
+                key={category}
+                type="button"
+                className={`chip${activeCategory === category ? ' chip--on' : ''}`}
+                onClick={() => setActiveCategory(category)}
+                aria-pressed={activeCategory === category}
+              >
+                {normalizeCategory(category)}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <section id={HOME_SEARCH_ID} className="surface" aria-labelledby="home-search-title">
