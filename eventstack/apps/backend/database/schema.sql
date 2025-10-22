@@ -11,16 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
 ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('ADMIN','USER','ORGANIZER'));
 
--- Venues
-CREATE TABLE IF NOT EXISTS venues (
-  id text PRIMARY KEY,
-  name text NOT NULL,
-  address text,
-  lat double precision NOT NULL,
-  lng double precision NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now()
-);
+-- Venues table removed: events now store venue_name directly
 
 -- Events
 CREATE TABLE IF NOT EXISTS events (
@@ -29,7 +20,7 @@ CREATE TABLE IF NOT EXISTS events (
   summary text,
   starts_at timestamptz NOT NULL,
   ends_at timestamptz NOT NULL,
-  venue_id text REFERENCES venues(id) ON DELETE CASCADE,
+  venue_name text,
   categories text[] DEFAULT '{}',
   searchable text DEFAULT '',
   created_at timestamptz DEFAULT now(),

@@ -8,20 +8,19 @@ export default function EventEdit() {
   const [summary, setSummary] = useState('')
   const [startsAt, setStartsAt] = useState('')
   const [endsAt, setEndsAt] = useState('')
-  const [venueId, setVenueId] = useState('')
-  const [venues, setVenues] = useState<any[]>([])
+  const [venueName, setVenueName] = useState('')
   const [categoriesCsv, setCategoriesCsv] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    api.listVenues().then(setVenues)
+    // no longer loading venues list; events store venueName directly
     if (id) {
       api.getEvent(id).then(e => {
         setTitle(e.title || '')
         setSummary(e.summary || '')
         setStartsAt(e.startsAt?.slice(0,16) || '')
         setEndsAt(e.endsAt?.slice(0,16) || '')
-        setVenueId(e.venue?.id || '')
+        setVenueName(e.venue?.name || '')
         setCategoriesCsv((e.categories || []).join(','))
       })
     }
@@ -29,7 +28,7 @@ export default function EventEdit() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    await api.updateEvent(id, { title, summary, startsAt, endsAt, venueId, categoriesCsv })
+    await api.updateEvent(id, { title, summary, startsAt, endsAt, venueName, categoriesCsv })
     navigate(`/event/${id}`)
   }
 
@@ -41,10 +40,7 @@ export default function EventEdit() {
       <div><input type="datetime-local" value={startsAt} onChange={e => setStartsAt(e.target.value)} required /></div>
       <div><input type="datetime-local" value={endsAt} onChange={e => setEndsAt(e.target.value)} required /></div>
       <div>
-        <select value={venueId} onChange={e => setVenueId(e.target.value)} required>
-          <option value="">Select venue</option>
-          {venues.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-        </select>
+        <input placeholder="Venue name" value={venueName} onChange={e => setVenueName(e.target.value)} required />
       </div>
       <div><input placeholder="Categories CSV" value={categoriesCsv} onChange={e => setCategoriesCsv(e.target.value)} /></div>
       <button type="submit">Save</button>

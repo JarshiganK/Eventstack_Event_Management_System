@@ -4,7 +4,6 @@ import multipart from "@fastify/multipart";
 import { corsOriginList } from "./env.js";
 
 import authRoutes from "./routes/auth.js";
-import venueRoutes from "./routes/venues.js";
 import eventRoutes from "./routes/events.js";
 import bookmarkRoutes from "./routes/bookmarks.js";
 import uploadRoutes from "./routes/uploads.js";
@@ -26,7 +25,6 @@ export async function buildServer() {
   app.get("/api/health", async () => ({ ok: true }));
 
   await app.register(authRoutes, { prefix: "/api" });
-  await app.register(venueRoutes, { prefix: "/api" });
   await app.register(eventRoutes, { prefix: "/api" });
   await app.register(bookmarkRoutes, { prefix: "/api" });
   await app.register(uploadRoutes, { prefix: "/api" });

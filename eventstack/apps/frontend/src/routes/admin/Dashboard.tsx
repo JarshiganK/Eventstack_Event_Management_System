@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import EventCard from '../../components/EventCard'
 import { api } from '../../lib/api'
+import { getHomeCategoryFiltersVisible, setHomeCategoryFiltersVisible } from '../../lib/homeFiltersVisibility'
 
 type EventSummary = {
   id?: string
@@ -25,7 +27,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('')
-  
+  const [homeFiltersVisible, setHomeFiltersVisible] = useState(() => getHomeCategoryFiltersVisible())
 
   useEffect(() => {
     setLoading(true)
@@ -36,13 +38,34 @@ export default function Dashboard() {
       .finally(() => setLoading(false))
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== 'home:categoryFiltersVisible') return
+      setHomeFiltersVisible(event.newValue !== 'false')
+    }
+
+    const handleEvent = (event: Event) => {
+      const detail = (event as CustomEvent<{ value?: boolean }>).detail
+      if (typeof detail?.value === 'boolean') {
+        setHomeFiltersVisible(detail.value)
+      }
+    }
+
+    window.addEventListener('storage', handleStorage)
+    window.addEventListener('homeCategoryFiltersVisibilityChanged', handleEvent as EventListener)
+    return () => {
+      window.removeEventListener('storage', handleStorage)
+      window.removeEventListener('homeCategoryFiltersVisibilityChanged', handleEvent as EventListener)
+    }
+  }, [])
+
   const categories = useMemo(() => {
     const set = new Set<string>()
     events.forEach(event => event.categories?.forEach(cat => cat && set.add(cat)))
     return Array.from(set).sort((a, b) => a.localeCompare(b))
   }, [events])
-
-  
 
   const filteredEvents = useMemo(() => {
     return events.filter(event => {
@@ -63,13 +86,19 @@ export default function Dashboard() {
     setter(current => (current === value ? '' : value))
   }
 
+  function toggleHomeFilters() {
+    const next = !homeFiltersVisible
+    setHomeCategoryFiltersVisible(next)
+    setHomeFiltersVisible(next)
+  }
+
   return (
-    <main className="page stack">
-      <header className="stack">
+    <main className="page admin-dashboard-page">
+      <header className="stack admin-dashboard-header">
         <span className="eyebrow">Admin overview</span>
         <h1 className="hero-title">Dashboard</h1>
-          <p className="hero-copy">
-          Monitor listings and filter by category to focus on specific content.
+        <p className="hero-copy">
+          Monitor listings, curate the home page and empower organizers with the controls they need.
         </p>
       </header>
 
@@ -86,8 +115,69 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="surface stack">
-        <h2>Quick filters</h2>
+      <section className="admin-control-grid">
+        <article className="surface-card admin-control-card">
+          <div className="admin-control-card__header">
+            <h2>Home experience</h2>
+            <span className={`badge ${homeFiltersVisible ? 'badge--success' : 'badge--muted'}`}>
+              {homeFiltersVisible ? 'Filters visible' : 'Filters hidden'}
+            </span>
+          </div>
+          <p>
+            Toggle the category chips on the public home page and open a preview to ensure the discovery flow looks
+            right.
+          </p>
+          <div className="admin-control-card__actions">
+            <button type="button" className="btn btn-tonal btn-sm" onClick={toggleHomeFilters}>
+              {homeFiltersVisible ? 'Hide home filters' : 'Show home filters'}
+            </button>
+            <Link to="/" className="btn btn-ghost btn-sm">
+              Preview home
+            </Link>
+          </div>
+        </article>
+
+        <article className="surface-card admin-control-card">
+          <div className="admin-control-card__header">
+            <h2>Organizer journey</h2>
+            <span className="badge badge--accent">Live</span>
+          </div>
+          <p>
+            Keep tabs on the organizer dashboard and onboarding experience. Use these shortcuts to collaborate with the
+            publisher team.
+          </p>
+          <div className="admin-control-card__actions">
+            <Link to="/organizer/dashboard" className="btn btn-primary btn-sm">
+              View organizer dashboard
+            </Link>
+            <Link to="/organizer/login" className="btn btn-ghost btn-sm">
+              Invite organizer
+            </Link>
+          </div>
+        </article>
+
+        <article className="surface-card admin-control-card">
+          <div className="admin-control-card__header">
+            <h2>Content operations</h2>
+            <span className="badge badge--muted">Actions</span>
+          </div>
+          <p>
+            Launch new events, tune venue information and keep your listings fresh with a steady cadence of updates.
+          </p>
+          <div className="admin-control-card__actions">
+            <Link to="/admin/events/new" className="btn btn-primary btn-sm">
+              Create event
+            </Link>
+            {/* Manage venues removed; events store venue name directly */}
+          </div>
+        </article>
+      </section>
+
+      <section className="surface-card admin-filters">
+        <div className="admin-filters__header">
+          <h2>Quick filters</h2>
+          <p>Use categories to focus reviews on specific themes or event types.</p>
+        </div>
         {categories.length ? (
           <div>
             <span className="eyebrow">Categories</span>
@@ -105,11 +195,12 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-        ) : null}
-        {/* zones/subzones removed - only category chips remain */}
+        ) : (
+          <p className="admin-filters__empty">Add categories when creating events to unlock focused reviews.</p>
+        )}
       </section>
 
-      <section className="stack" aria-live="polite">
+      <section className="stack admin-event-feed" aria-live="polite">
         {loading ? (
           <div className="grid">
             {Array.from({ length: 4 }).map((_, idx) => (
@@ -136,4 +227,3 @@ export default function Dashboard() {
     </main>
   )
 }
-

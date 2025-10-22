@@ -10,7 +10,6 @@ import AdminLogin from './routes/admin/AdminLogin'
 import Dashboard from './routes/admin/Dashboard'
 import EventNew from './routes/admin/EventNew'
 import EventEdit from './routes/admin/EventEdit'
-import VenueList from './routes/admin/VenueList'
 import OrganizerLogin from './routes/organizer/OrganizerLogin'
 import OrganizerDashboard from './routes/organizer/OrganizerDashboard'
 import NavBar from './components/NavBar'
@@ -31,7 +30,6 @@ export default function App() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/events/new" element={<EventNew />} />
           <Route path="/admin/events/:id/edit" element={<EventEdit />} />
-          <Route path="/admin/venues" element={<VenueList />} />
           <Route path="/organizer/login" element={<OrganizerLogin />} />
           <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
           <Route path="*" element={<Navigate to="/" />} />

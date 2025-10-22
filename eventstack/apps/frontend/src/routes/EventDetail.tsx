@@ -12,7 +12,7 @@ type EventDetailData = {
   endsAt?: string
   coverUrl?: string
   categories?: string[]
-  venue?: { name?: string }
+  venue?: { name?: string; lat?: number; lng?: number }
   images?: Array<{ url: string }>
 }
 
@@ -92,11 +92,7 @@ export default function EventDetail() {
     }
   }
 
-  const handleDirections = () => {
-    if (!event?.venue?.name) return
-    const query = encodeURIComponent([event.venue.name].filter(Boolean).join(' · '))
-    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank', 'noopener')
-  }
+  // Directions removed per create-flow simplification request
 
   const handleShare = async () => {
     if (!event) return
@@ -124,6 +120,16 @@ export default function EventDetail() {
     const location = encodeURIComponent(event.venue?.name ?? '')
     const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}&location=${location}`
     window.open(calendarUrl, '_blank', 'noopener')
+  }
+
+  // Resolve backend-hosted upload URLs (paths like '/uploads/xxx') to full URLs
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'
+  const API_HOST = API_BASE.replace(/\/api\/?$/, '')
+  const resolveUrl = (u?: string) => {
+    if (!u) return ''
+    if (u.startsWith('http://') || u.startsWith('https://')) return u
+    if (u.startsWith('/')) return `${API_HOST}${u}`
+    return u
   }
 
   if (loading) {
@@ -154,9 +160,10 @@ export default function EventDetail() {
     <main className="page stack">
       <BackLink className="mb-4" />
 
+      {/* Show coverUrl or fall back to first gallery image */}
       <div className="cover-wrapper" role="img" aria-label={event.title}>
-        {event.coverUrl ? (
-          <img src={event.coverUrl} alt={event.title} loading="lazy" />
+        {((event.coverUrl && resolveUrl(event.coverUrl)) || (event.images && event.images[0]?.url)) ? (
+          <img src={resolveUrl(event.coverUrl || event.images?.[0]?.url)} alt={event.title} loading="lazy" />
         ) : (
           <div className="card-img shimmer" aria-hidden="true" />
         )}
@@ -198,9 +205,7 @@ export default function EventDetail() {
           <button type="button" className="btn btn-primary" onClick={handleBookmark}>
             {bookmarked ? 'Remove bookmark' : 'Bookmark'}
           </button>
-          <button type="button" className="btn btn-tonal" onClick={handleDirections}>
-            Directions
-          </button>
+          {/* Directions removed */}
           <button type="button" className="btn btn-outline" onClick={handleShare}>
             Share
           </button>
@@ -245,7 +250,7 @@ export default function EventDetail() {
         <section className="grid">
           {event.images.map((image, index) => (
             <div key={image.url ?? index} className="cover-wrapper">
-              <img src={image.url} alt={`${event.title} gallery ${index + 1}`} loading="lazy" />
+              <img src={resolveUrl(image.url)} alt={`${event.title} gallery ${index + 1}`} loading="lazy" />
             </div>
           ))}
         </section>

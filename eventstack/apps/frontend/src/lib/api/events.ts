@@ -11,16 +11,23 @@ export async function listEvents(params?: { from?: string; to?: string; category
 
 export async function getEvent(id: string) { return http<any>(`/events/${id}`) }
 
-export async function createEvent(e: { title: string; summary?: string; startsAt: string; endsAt: string; venueId: string; categoriesCsv?: string }) {
+export async function createEvent(e: { title: string; summary?: string; startsAt: string; endsAt: string; venueName?: string; categoriesCsv?: string }) {
   return http<{ id: string }>(
     '/admin/events', { method: 'POST', body: JSON.stringify(e) }
   )
 }
 
-export async function updateEvent(id: string, e: { title: string; summary?: string; startsAt: string; endsAt: string; venueId: string; categoriesCsv?: string }) {
+export async function updateEvent(id: string, e: { title: string; summary?: string; startsAt: string; endsAt: string; venueName?: string; categoriesCsv?: string }) {
   return http<{ id: string }>(
     `/admin/events/${id}`, { method: 'PUT', body: JSON.stringify(e) }
   )
 }
 
 export async function deleteEvent(id: string) { return http<{ id: string }>(`/admin/events/${id}`, { method: 'DELETE' }) }
+
+export async function addEventImage(id: string, image: { url: string; width?: number; height?: number }) {
+  return http<{ id: string; url: string; ord: number }>(
+    `/admin/events/${id}/images`,
+    { method: 'POST', body: JSON.stringify(image) }
+  )
+}

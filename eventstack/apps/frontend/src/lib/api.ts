@@ -1,6 +1,6 @@
 import * as auth from "./api/auth"
 import * as events from "./api/events"
-import * as venues from "./api/venues"
+// venues API removed - events store venue_name directly
 import * as misc from "./api/misc"
 
 export const api = {
@@ -9,11 +9,7 @@ export const api = {
   register: auth.register,
   me: auth.me,
 
-  // venues
-  listVenues: venues.listVenues,
-  createVenue: venues.createVenue,
-  updateVenue: venues.updateVenue,
-  deleteVenue: venues.deleteVenue,
+  // venues: removed — events now store venueName directly
 
   // events
   listEvents: events.listEvents,
@@ -21,6 +17,7 @@ export const api = {
   createEvent: events.createEvent,
   updateEvent: events.updateEvent,
   deleteEvent: events.deleteEvent,
+  addEventImage: events.addEventImage,
 
   // misc
   listBookmarks: misc.listBookmarks,
@@ -30,4 +27,3 @@ export const api = {
   search: misc.search,
   notifications: misc.notifications,
 }
-

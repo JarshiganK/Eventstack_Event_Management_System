@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import BackLink from '../../components/BackLink'
 import { api } from '../../lib/api'
 
-type VenueSummary = { id: string; name: string }
 
 function normalizeError(err: unknown, fallback: string) {
   if (err instanceof Error && err.message) {
@@ -24,8 +23,7 @@ export default function EventNew() {
   const [summary, setSummary] = useState('')
   const [startsAt, setStartsAt] = useState('')
   const [endsAt, setEndsAt] = useState('')
-  const [venueId, setVenueId] = useState('')
-  const [venues, setVenues] = useState<VenueSummary[]>([])
+  const [venueName, setVenueName] = useState('')
   const [categoriesCsv, setCategoriesCsv] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -34,20 +32,9 @@ export default function EventNew() {
   const navigate = useNavigate()
   const redirectTimerRef = useRef<number | null>(null)
 
-  useEffect(() => {
-    let active = true
-    void api
-      .listVenues()
-      .then(list => {
-        if (active) setVenues(list)
-      })
-      .catch(() => {
-        if (active) setVenues([])
-      })
-    return () => {
-      active = false
-    }
-  }, [])
+  // No venue list — we accept a typed venue name and create minimal venue server-side
+
+  // No Google Places autocomplete — simplified venue input
 
   useEffect(() => {
     return () => {
@@ -63,10 +50,18 @@ export default function EventNew() {
     setError(null)
     setSubmitting(true)
     try {
-      const payload = { title, summary, startsAt, endsAt, venueId, categoriesCsv }
-      await api.createEvent(payload)
+      // Send venueName directly in the payload (backend stores venue_name on events)
+      const payload = { title, summary, startsAt, endsAt, venueName: venueName || 'Unnamed venue', categoriesCsv }
+        const { id: createdId } = await api.createEvent(payload)
       if (file) {
-        await api.uploadFile(file)
+        try {
+          const { url } = await api.uploadFile(file)
+          if (url) {
+            await api.addEventImage(createdId, { url })
+          }
+        } catch (uploadErr) {
+          setError(normalizeError(uploadErr, 'Event saved, but we could not attach the image. You can try again from the edit screen.'))
+        }
       }
       setShowConfirm(true)
       if (redirectTimerRef.current) {
@@ -157,19 +152,14 @@ export default function EventNew() {
 
           <label className="form-field">
             <span>Venue</span>
-            <select
+            <input
               className="form-input"
-              value={venueId}
-              onChange={event => setVenueId(event.target.value)}
+              placeholder="Venue name"
+              value={venueName}
+                onChange={e => { setVenueName(e.target.value) }}
               required
-            >
-              <option value="">Select a venue</option>
-              {venues.map(venue => (
-                <option key={venue.id} value={venue.id}>
-                  {venue.name}
-                </option>
-              ))}
-            </select>
+            />
+            <small className="form-hint">Type the venue name. You can add address later in venue management.</small>
           </label>
 
           <label className="form-field">

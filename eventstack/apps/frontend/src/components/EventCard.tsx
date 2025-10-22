@@ -42,6 +42,16 @@ const formatCategoryLabel = (value: string) =>
 
 const EventCardInner = ({ event }: EventCardProps) => {
   const artwork = event.coverUrl || event.images?.[0]?.url || ''
+  // Resolve backend-hosted uploads (paths like '/uploads/xxx') to full URLs
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'
+  const API_HOST = API_BASE.replace(/\/api\/?$/, '')
+  const resolveUrl = (u?: string) => {
+    if (!u) return ''
+    if (u.startsWith('http://') || u.startsWith('https://')) return u
+    if (u.startsWith('/')) return `${API_HOST}${u}`
+    return u
+  }
+  const artworkSrc = resolveUrl(artwork)
   const primaryCategory = event.categories?.[0]
   const schedule = formatDateRange(event.startsAt, event.endsAt)
   const venueLabel = [event.venue?.name].filter(Boolean).join(' · ')
@@ -49,8 +59,8 @@ const EventCardInner = ({ event }: EventCardProps) => {
   return (
     <>
       <div className="event-card__cover">
-        {artwork ? (
-          <img src={artwork} alt={event.title} className="card-img" loading="lazy" />
+        {artworkSrc ? (
+          <img src={artworkSrc} alt={event.title} className="card-img" loading="lazy" />
         ) : (
           <div className="card-img shimmer" aria-hidden="true" />
         )}
