@@ -40,11 +40,7 @@ export default function NavBar() {
         <span>Saved</span>
       </NavLink>
 
-      <NavLink
-        to="/login"
-        aria-label="Profile"
-        className={({ isActive }) => `navbtn${isActive ? ' navbtn--active' : ''}`}
-      >
+      <NavLink to="/profile" aria-label="Profile" className={({ isActive }) => `navbtn${isActive ? ' navbtn--active' : ''}`}>
         {ProfileIcon}
         <span>Profile</span>
       </NavLink>

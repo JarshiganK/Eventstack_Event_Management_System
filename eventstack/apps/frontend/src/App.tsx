@@ -5,6 +5,7 @@ import EventDetail from './routes/EventDetail'
 import Bookmarks from './routes/Bookmarks'
 import Notifications from './routes/Notifications'
 import Login from './routes/Login'
+import Profile from './routes/Profile'
 import AdminLogin from './routes/admin/AdminLogin'
 import Dashboard from './routes/admin/Dashboard'
 import EventNew from './routes/admin/EventNew'
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/events/new" element={<EventNew />} />

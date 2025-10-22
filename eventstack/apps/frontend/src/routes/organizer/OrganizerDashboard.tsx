@@ -92,7 +92,7 @@ export default function OrganizerDashboard() {
       <BackLink className="mb-4" />
 
       <section className="dashboard-hero surface-card">
-        <div>
+        <div className="dashboard-hero__content">
           <span className="page-eyebrow">Organizer control center</span>
           <h1>Dashboard</h1>
           <p>Monitor performance, fine-tune listings and launch new experiences in a click.</p>
@@ -120,10 +120,10 @@ export default function OrganizerDashboard() {
       <section className="dashboard-section">
         <div className="section-heading">
           <h2>Your events</h2>
-          <div>
+          <div className="dashboard-toolbar">
             <button
               type="button"
-              className="btn btn-outline me-2"
+              className="btn btn-outline"
               aria-pressed={homeFiltersVisible}
               onClick={toggleHomeFilters}
             >
@@ -132,7 +132,7 @@ export default function OrganizerDashboard() {
             {availableCategories.length ? (
               <button
                 type="button"
-                className="btn btn-ghost me-2"
+                className="btn btn-ghost"
                 aria-controls="dashboard-category-filters"
                 aria-expanded={filtersVisible}
                 onClick={() =>
