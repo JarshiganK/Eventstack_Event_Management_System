@@ -7,7 +7,6 @@ import authRoutes from "./routes/auth.js";
 import eventRoutes from "./routes/events.js";
 import bookmarkRoutes from "./routes/bookmarks.js";
 import uploadRoutes from "./routes/uploads.js";
-import notificationRoutes from "./routes/notifications.js";
 import searchRoutes from "./routes/search.js";
 import { join } from "path";
 import { existsSync, mkdirSync } from "fs";
@@ -28,7 +27,6 @@ export async function buildServer() {
   await app.register(eventRoutes, { prefix: "/api" });
   await app.register(bookmarkRoutes, { prefix: "/api" });
   await app.register(uploadRoutes, { prefix: "/api" });
-  await app.register(notificationRoutes, { prefix: "/api" });
   await app.register(searchRoutes, { prefix: "/api" });
 
   return app;
