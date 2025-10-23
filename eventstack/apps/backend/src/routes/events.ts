@@ -54,7 +54,7 @@ export default async function eventRoutes(app: FastifyInstance) {
   app.get<{ Params: { id: string } }>("/events/:id", async (req, reply) => {
     const { id } = req.params;
     const { rows } = await query(
-      `SELECT e.* , v.cover_url FROM (
+      `SELECT e.* , e.cover_url FROM (
         SELECT e.*, (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url FROM events e
       ) e WHERE e.id=$1`,
       [id]
