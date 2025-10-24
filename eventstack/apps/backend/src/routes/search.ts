@@ -23,10 +23,8 @@ export default async function searchRoutes(app: FastifyInstance) {
     }
 
     const { rows } = await query(
-      `SELECT e.*, v.id as venue_id, v.name as venue_name, v.lat, v.lng,
-              (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url
+      `SELECT e.*, (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url
        FROM events e
-       LEFT JOIN venues v ON v.id=e.venue_id
        WHERE ${where}
        ORDER BY e.starts_at ASC`,
       params
@@ -40,7 +38,7 @@ export default async function searchRoutes(app: FastifyInstance) {
       endsAt: new Date(r.ends_at).toISOString(),
       categories: r.categories || [],
       coverUrl: r.cover_url || undefined,
-      venue: { id: r.venue_id, name: r.venue_name, lat: r.lat, lng: r.lng }
+      venue: { id: undefined as any, name: r.venue_name }
     }));
     return { results };
   });

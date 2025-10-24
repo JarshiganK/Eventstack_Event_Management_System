@@ -12,10 +12,9 @@ export default async function bookmarkRoutes(app: FastifyInstance) {
     const { rows } = await query(
       `SELECT b.event_id as id, e.title, e.summary, e.starts_at, e.ends_at,
               (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url,
-                      v.name as venue_name, v.lat, v.lng
+              e.venue_name
        FROM bookmarks b
        JOIN events e ON e.id=b.event_id
-       LEFT JOIN venues v ON v.id=e.venue_id
        WHERE b.user_id=$1
        ORDER BY b.created_at DESC`,
       [user.id]
@@ -27,7 +26,7 @@ export default async function bookmarkRoutes(app: FastifyInstance) {
       startsAt: new Date(r.starts_at).toISOString(),
       endsAt: new Date(r.ends_at).toISOString(),
       coverUrl: r.cover_url || undefined,
-              venue: { id: undefined as any, name: r.venue_name, lat: r.lat, lng: r.lng }
+      venue: { id: undefined as any, name: r.venue_name }
     }));
   });
 

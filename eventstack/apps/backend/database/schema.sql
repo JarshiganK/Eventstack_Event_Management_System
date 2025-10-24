@@ -11,9 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
 ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('ADMIN','USER','ORGANIZER'));
 
--- Venues table removed: events now store venue_name directly
-
--- Events
+-- Ensure any legacy venue column is removed and new venue_name column exists
 CREATE TABLE IF NOT EXISTS events (
   id text PRIMARY KEY,
   title text NOT NULL,
@@ -26,6 +24,9 @@ CREATE TABLE IF NOT EXISTS events (
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
+
+ALTER TABLE events DROP COLUMN IF EXISTS venue_id;
+ALTER TABLE events ADD COLUMN IF NOT EXISTS venue_name text;
 
 -- Event Images
 CREATE TABLE IF NOT EXISTS event_images (
@@ -65,4 +66,3 @@ CREATE INDEX IF NOT EXISTS idx_events_starts_at ON events(starts_at);
 CREATE INDEX IF NOT EXISTS idx_events_categories ON events USING GIN (categories);
 CREATE INDEX IF NOT EXISTS idx_event_images_event_ord ON event_images(event_id, ord);
 CREATE INDEX IF NOT EXISTS idx_bookmarks_user ON bookmarks(user_id);
-

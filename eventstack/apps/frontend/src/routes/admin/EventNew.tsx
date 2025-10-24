@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEvent, useRef } from 'react'
+﻿import { useEffect, useState, FormEvent, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackLink from '../../components/BackLink'
 import { api } from '../../lib/api'
@@ -32,9 +32,9 @@ export default function EventNew() {
   const navigate = useNavigate()
   const redirectTimerRef = useRef<number | null>(null)
 
-  // No venue list — we accept a typed venue name and create minimal venue server-side
+  // No venue list â€” we accept a typed venue name and create minimal venue server-side
 
-  // No Google Places autocomplete — simplified venue input
+  // No Google Places autocomplete â€” simplified venue input
 
   useEffect(() => {
     return () => {
@@ -156,7 +156,7 @@ export default function EventNew() {
               className="form-input"
               placeholder="Venue name"
               value={venueName}
-                onChange={e => { setVenueName(e.target.value) }}
+              onChange={event => setVenueName(event.target.value)}
               required
             />
             <small className="form-hint">Type the venue name. You can add address later in venue management.</small>
@@ -214,12 +214,10 @@ export default function EventNew() {
           </span>
           <div>
             <strong>Event created</strong>
-            <p>We’ll take you back to the dashboard in a moment.</p>
+            <p>We'll take you back to the dashboard in a moment.</p>
           </div>
         </div>
       ) : null}
     </div>
   )
 }
-
-
