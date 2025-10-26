@@ -8,6 +8,7 @@ import eventRoutes from "./routes/events.js";
 import bookmarkRoutes from "./routes/bookmarks.js";
 import uploadRoutes from "./routes/uploads.js";
 import searchRoutes from "./routes/search.js";
+import adminRoutes from "./routes/admin.js";
 import { join } from "path";
 import { existsSync, mkdirSync } from "fs";
 import fastifyStatic from "@fastify/static";
@@ -28,6 +29,7 @@ export async function buildServer() {
   await app.register(bookmarkRoutes, { prefix: "/api" });
   await app.register(uploadRoutes, { prefix: "/api" });
   await app.register(searchRoutes, { prefix: "/api" });
+  await app.register(adminRoutes, { prefix: "/api" });
 
   return app;
 }
