@@ -2,6 +2,7 @@ import * as auth from "./api/auth"
 import * as events from "./api/events"
 // venues API removed - events store venue_name directly
 import * as misc from "./api/misc"
+import * as admin from "./api/admin"
 
 export const api = {
   // auth
@@ -26,4 +27,12 @@ export const api = {
   uploadFile: misc.uploadFile,
   search: misc.search,
   notifications: misc.notifications,
+
+  // admin
+  getAnalytics: admin.getAnalytics,
+  listUsers: admin.listUsers,
+  listOrganizers: admin.listOrganizers,
+  updateUserRole: admin.updateUserRole,
+  updateUserStatus: admin.updateUserStatus,
+  deleteUser: admin.deleteUser,
 }
