@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.09% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -90,18 +90,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -111,18 +111,18 @@ import { join } from "path";
 import { createWriteStream } from "fs";
 &nbsp;
 export default async function uploadRoutes(app: FastifyInstance) {
-  app.post("/admin/uploads", { preHandler: requireOrganizerOrAdmin }, <span class="fstat-no" title="function not covered" >async (r</span>eq) =&gt; {
-    const data = <span class="cstat-no" title="statement not covered" >await (req as any).file();</span>
-<span class="cstat-no" title="statement not covered" >    if (!data) <span class="cstat-no" title="statement not covered" >return { url: null };</span></span>
-    const filename = <span class="cstat-no" title="statement not covered" >`${Date.now()}_${data.filename}`.replace(/[^a-zA-Z0-9._-]/g, "_");</span>
-    const <span class="cstat-no" title="statement not covered" >uploadsDir = join(process.cwd(), "apps", "backend", "uploads");</span>
-<span class="cstat-no" title="statement not covered" >    await new Promise&lt;void&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
-      const <span class="cstat-no" title="statement not covered" >ws = createWriteStream(join(uploadsDir, filename));</span>
-<span class="cstat-no" title="statement not covered" >      data.file.pipe(ws);</span>
-<span class="cstat-no" title="statement not covered" >      ws.on("finish", <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve())</span>;</span>
-<span class="cstat-no" title="statement not covered" >      ws.on("error", reject);</span>
+  app.post("/admin/uploads", { preHandler: requireOrganizerOrAdmin }, async (req) =&gt; {
+    const data = await (req as any).file();
+    if (!data) return { url: null };
+    const filename = `${Date.now()}_${data.filename}`.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const uploadsDir = join(process.cwd(), "apps", "backend", "uploads");
+    await new Promise&lt;void&gt;((resolve, reject) =&gt; {
+      const ws = createWriteStream(join(uploadsDir, filename));
+      data.file.pipe(ws);
+      ws.on("finish", () =&gt; resolve());
+      ws.on("error", reject);
     });
-<span class="cstat-no" title="statement not covered" >    return { url: `/uploads/${filename}` };</span>
+    return { url: `/uploads/${filename}` };
   });
 }
 &nbsp;
@@ -133,7 +133,7 @@ export default async function uploadRoutes(app: FastifyInstance) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T18:20:18.471Z
+                at 2025-10-27T08:48:35.810Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

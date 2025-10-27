@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.85% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/21</span>
+                <span class='fraction'>14/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/14</span>
+                <span class='fraction'>6/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.05% </span>
+                <span class="strong">76.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/17</span>
+                <span class='fraction'>13/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -104,16 +104,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,6 +114,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,18 +133,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { http } from "../http"
 import { authHeader } from "../http"
 &nbsp;
 export async function listBookmarks() { return http&lt;any[]&gt;('/me/bookmarks') }
-export async function <span class="fstat-no" title="function not covered" >addBookmark(e</span>ventId: string) { <span class="cstat-no" title="statement not covered" >return http&lt;{ ok: true }&gt;(</span>
+export async function addBookmark(eventId: string) { return http&lt;{ ok: true }&gt;(
   '/me/bookmarks', { method: 'POST', body: JSON.stringify({ eventId }) }
 ) }
-export async function <span class="fstat-no" title="function not covered" >removeBookmark(e</span>ventId: string) { <span class="cstat-no" title="statement not covered" >return http&lt;{ ok: true }&gt;(</span>
+export async function removeBookmark(eventId: string) { return http&lt;{ ok: true }&gt;(
   `/me/bookmarks/${eventId}`, { method: 'DELETE' }
 ) }
 &nbsp;
@@ -169,10 +169,10 @@ export async function search(queryStr: string, filters?: { category?: string }) 
 <span class="cstat-no" title="statement not covered" >  return http&lt;{ results: any[] }&gt;(`/search?${qs.toString()}`)</span>
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >notifications(u</span>serId: string) {
-  const res = <span class="cstat-no" title="statement not covered" >await fetch(`${(import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'}/notifications/user/${encodeURIComponent(userId)}`, { headers: { ...authHeader() } })</span>
-<span class="cstat-no" title="statement not covered" >  if (!res.ok) <span class="cstat-no" title="statement not covered" >throw new Error(await res.text())</span></span>
-<span class="cstat-no" title="statement not covered" >  return res.json() as Promise&lt;any[]&gt;</span>
+export async function notifications(userId: string) {
+  const res = await fetch(`${(import.meta as any).env?.VITE_API_BASE || <span class="branch-1 cbranch-no" title="branch not covered" >'http://localhost:4000/api'}</span>/notifications/user/${encodeURIComponent(userId)}`, { headers: { ...authHeader() } })
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!res.ok) <span class="cstat-no" title="statement not covered" >throw new Error(await res.text())</span>
+  return res.json() as Promise&lt;any[]&gt;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -181,7 +181,7 @@ export async function <span class="fstat-no" title="function not covered" >notif
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T18:21:24.498Z
+                at 2025-10-27T08:49:16.788Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

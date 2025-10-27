@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -124,22 +124,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -150,23 +139,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,9 +180,9 @@ import { requireUser } from "../auth.js";
 export default async function bookmarkRoutes(app: FastifyInstance) {
   const addSchema = z.object({ eventId: z.string() });
 &nbsp;
-  app.get("/me/bookmarks", { preHandler: requireUser }, <span class="fstat-no" title="function not covered" >async (r</span>eq) =&gt; {
-    const user = (<span class="cstat-no" title="statement not covered" >req as any).user as { id: string };</span>
-    const { rows } = <span class="cstat-no" title="statement not covered" >await query(</span>
+  app.get("/me/bookmarks", { preHandler: requireUser }, async (req) =&gt; {
+    const user = (req as any).user as { id: string };
+    const { rows } = await query(
       `SELECT b.event_id as id, e.title, e.summary, e.starts_at, e.ends_at,
               (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url,
               e.venue_name
@@ -192,35 +192,35 @@ export default async function bookmarkRoutes(app: FastifyInstance) {
        ORDER BY b.created_at DESC`,
       [user.id]
     );
-<span class="cstat-no" title="statement not covered" >    return rows.map(<span class="fstat-no" title="function not covered" >(r</span>: any) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+    return rows.map((r: any) =&gt; ({
       id: r.id,
       title: r.title,
       summary: r.summary,
       startsAt: new Date(r.starts_at).toISOString(),
       endsAt: new Date(r.ends_at).toISOString(),
-      coverUrl: r.cover_url || undefined,
+      coverUrl: r.cover_url || <span class="branch-1 cbranch-no" title="branch not covered" >undefined,</span>
       venue: { id: undefined as any, name: r.venue_name }
     }));
   });
 &nbsp;
-  app.post("/me/bookmarks", { preHandler: requireUser }, <span class="fstat-no" title="function not covered" >async (r</span>eq, reply) =&gt; {
-    const body = <span class="cstat-no" title="statement not covered" >addSchema.parse(req.body);</span>
-    const user = (<span class="cstat-no" title="statement not covered" >req as any).user as { id: string };</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      await query(</span>
+  app.post("/me/bookmarks", { preHandler: requireUser }, async (req, reply) =&gt; {
+    const body = addSchema.parse(req.body);
+    const user = (req as any).user as { id: string };
+    try {
+      await query(
         `INSERT INTO bookmarks (id, user_id, event_id) VALUES ($1,$2,$3)`,
         [cuid(), user.id, body.eventId]
       );
     } catch (e: any) {
       // likely duplicate
     }
-<span class="cstat-no" title="statement not covered" >    reply.code(201).send({ ok: true });</span>
+    reply.code(201).send({ ok: true });
   });
 &nbsp;
-  app.delete&lt;{ Params: { eventId: string } }&gt;("/me/bookmarks/:eventId", { preHandler: requireUser }, <span class="fstat-no" title="function not covered" >async (r</span>eq) =&gt; {
-    const user = (<span class="cstat-no" title="statement not covered" >req as any).user as { id: string };</span>
-<span class="cstat-no" title="statement not covered" >    await query(`DELETE FROM bookmarks WHERE user_id=$1 AND event_id=$2`, [user.id, req.params.eventId]);</span>
-<span class="cstat-no" title="statement not covered" >    return { ok: true };</span>
+  app.delete&lt;{ Params: { eventId: string } }&gt;("/me/bookmarks/:eventId", { preHandler: requireUser }, async (req) =&gt; {
+    const user = (req as any).user as { id: string };
+    await query(`DELETE FROM bookmarks WHERE user_id=$1 AND event_id=$2`, [user.id, req.params.eventId]);
+    return { ok: true };
   });
 }
 &nbsp;
@@ -232,7 +232,7 @@ export default async function bookmarkRoutes(app: FastifyInstance) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T18:20:18.471Z
+                at 2025-10-27T08:48:35.810Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

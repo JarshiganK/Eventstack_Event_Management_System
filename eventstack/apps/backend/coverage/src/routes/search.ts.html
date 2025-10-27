@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -115,26 +115,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,7 +142,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,7 +152,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,21 +167,21 @@ export default async function searchRoutes(app: FastifyInstance) {
     category: z.string().optional().default("")
   });
 &nbsp;
-  app.get("/search", <span class="fstat-no" title="function not covered" >async (r</span>eq) =&gt; {
-    const q = <span class="cstat-no" title="statement not covered" >qSchema.parse(req.query);</span>
-    const <span class="cstat-no" title="statement not covered" >search = (q.query || "").trim();</span>
-<span class="cstat-no" title="statement not covered" >    if (!search) {</span>
-<span class="cstat-no" title="statement not covered" >      return { results: [] };</span>
+  app.get("/search", async (req) =&gt; {
+    const q = qSchema.parse(req.query);
+    const search = (q.query || <span class="branch-1 cbranch-no" title="branch not covered" >"").t</span>rim();
+    if (!search) {
+      return { results: [] };
     }
 &nbsp;
-    const params: any[] = <span class="cstat-no" title="statement not covered" >[search];</span>
-    let where = <span class="cstat-no" title="statement not covered" >`lower(e.searchable) LIKE '%' || lower($1) || '%'`;</span>
-<span class="cstat-no" title="statement not covered" >    if (q.category) {</span>
-<span class="cstat-no" title="statement not covered" >      params.push(q.category);</span>
-<span class="cstat-no" title="statement not covered" >      where += ` AND $${params.length} = ANY(e.categories)`;</span>
+    const params: any[] = [search];
+    let where = `lower(e.searchable) LIKE '%' || lower($1) || '%'`;
+    if (q.category) {
+      params.push(q.category);
+      where += ` AND $${params.length} = ANY(e.categories)`;
     }
 &nbsp;
-    const { rows } = <span class="cstat-no" title="statement not covered" >await query(</span>
+    const { rows } = await query(
       `SELECT e.*, (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url
        FROM events e
        WHERE ${where}
@@ -189,17 +189,17 @@ export default async function searchRoutes(app: FastifyInstance) {
       params
     );
 &nbsp;
-    const results = <span class="cstat-no" title="statement not covered" >rows.map(<span class="fstat-no" title="function not covered" >(r</span>: any) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+    const results = rows.map((r: any) =&gt; ({
       id: r.id,
       title: r.title,
       summary: r.summary,
       startsAt: new Date(r.starts_at).toISOString(),
       endsAt: new Date(r.ends_at).toISOString(),
-      categories: r.categories || [],
-      coverUrl: r.cover_url || undefined,
+      categories: r.categories || <span class="branch-1 cbranch-no" title="branch not covered" >[],</span>
+      coverUrl: r.cover_url || <span class="branch-1 cbranch-no" title="branch not covered" >undefined,</span>
       venue: { id: undefined as any, name: r.venue_name }
     }));
-<span class="cstat-no" title="statement not covered" >    return { results };</span>
+    return { results };
   });
 }
 &nbsp;
@@ -211,7 +211,7 @@ export default async function searchRoutes(app: FastifyInstance) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T18:20:18.471Z
+                at 2025-10-27T08:48:35.810Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

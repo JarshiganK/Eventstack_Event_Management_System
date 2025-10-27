@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.28% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/14</span>
+                <span class='fraction'>13/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.63% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,21 +110,21 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,22 +142,22 @@ export async function listEvents(params?: { from?: string; to?: string; category
 &nbsp;
 export async function getEvent(id: string) { return http&lt;any&gt;(`/events/${id}`) }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >createEvent(e</span>: { title: string; summary?: string; startsAt: string; endsAt: string; venueName?: string; categoriesCsv?: string }) {
-<span class="cstat-no" title="statement not covered" >  return http&lt;{ id: string }&gt;(</span>
+export async function createEvent(e: { title: string; summary?: string; startsAt: string; endsAt: string; venueName?: string; categoriesCsv?: string }) {
+  return http&lt;{ id: string }&gt;(
     '/admin/events', { method: 'POST', body: JSON.stringify(e) }
   )
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >updateEvent(i</span>d: string, e: { title: string; summary?: string; startsAt: string; endsAt: string; venueName?: string; categoriesCsv?: string }) {
-<span class="cstat-no" title="statement not covered" >  return http&lt;{ id: string }&gt;(</span>
+export async function updateEvent(id: string, e: { title: string; summary?: string; startsAt: string; endsAt: string; venueName?: string; categoriesCsv?: string }) {
+  return http&lt;{ id: string }&gt;(
     `/admin/events/${id}`, { method: 'PUT', body: JSON.stringify(e) }
   )
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >deleteEvent(i</span>d: string) { <span class="cstat-no" title="statement not covered" >return http&lt;{ id: string }&gt;(`/admin/events/${id}`, { method: 'DELETE' }) }</span>
+export async function deleteEvent(id: string) { return http&lt;{ id: string }&gt;(`/admin/events/${id}`, { method: 'DELETE' }) }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >addEventImage(i</span>d: string, image: { url: string; width?: number; height?: number }) {
-<span class="cstat-no" title="statement not covered" >  return http&lt;{ id: string; url: string; ord: number }&gt;(</span>
+export async function addEventImage(id: string, image: { url: string; width?: number; height?: number }) {
+  return http&lt;{ id: string; url: string; ord: number }&gt;(
     `/admin/events/${id}/images`,
     { method: 'POST', body: JSON.stringify(image) }
   )
@@ -169,7 +169,7 @@ export async function <span class="fstat-no" title="function not covered" >addEv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T18:21:24.498Z
+                at 2025-10-27T08:49:16.788Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
