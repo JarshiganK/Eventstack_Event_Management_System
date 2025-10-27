@@ -1,5 +1,7 @@
 import * as auth from "./api/auth"
 import * as events from "./api/events"
+import * as expenses from "./api/expenses"
+import * as bot from "./api/bot"
 // venues API removed - events store venue_name directly
 import * as misc from "./api/misc"
 import * as admin from "./api/admin"
@@ -19,6 +21,11 @@ export const api = {
   updateEvent: events.updateEvent,
   deleteEvent: events.deleteEvent,
   addEventImage: events.addEventImage,
+  listEventExpenses: expenses.listEventExpenses,
+  createEventExpense: expenses.createEventExpense,
+  updateEventExpense: expenses.updateEventExpense,
+  deleteEventExpense: expenses.deleteEventExpense,
+  askBudgetBot: bot.askBudgetBot,
 
   // misc
   listBookmarks: misc.listBookmarks,

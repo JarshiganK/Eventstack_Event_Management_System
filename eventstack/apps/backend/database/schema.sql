@@ -38,6 +38,24 @@ CREATE TABLE IF NOT EXISTS event_images (
   ord int DEFAULT 0
 );
 
+-- Event Expenses
+CREATE TABLE IF NOT EXISTS event_expenses (
+  id text PRIMARY KEY,
+  event_id text REFERENCES events(id) ON DELETE CASCADE,
+  label text NOT NULL,
+  category text NOT NULL DEFAULT 'GENERAL',
+  vendor text,
+  quantity numeric(12,2) DEFAULT 1,
+  estimated_cost numeric(14,2) DEFAULT 0,
+  actual_cost numeric(14,2) DEFAULT 0,
+  status text NOT NULL DEFAULT 'PLANNED',
+  incurred_on date,
+  notes text,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now(),
+  CONSTRAINT event_expenses_status_check CHECK (status IN ('PLANNED','COMMITTED','PAID'))
+);
+
 -- Bookmarks
 CREATE TABLE IF NOT EXISTS bookmarks (
   id text PRIMARY KEY,
@@ -65,4 +83,5 @@ CREATE INDEX IF NOT EXISTS idx_notifications_user_created ON notifications(user_
 CREATE INDEX IF NOT EXISTS idx_events_starts_at ON events(starts_at);
 CREATE INDEX IF NOT EXISTS idx_events_categories ON events USING GIN (categories);
 CREATE INDEX IF NOT EXISTS idx_event_images_event_ord ON event_images(event_id, ord);
+CREATE INDEX IF NOT EXISTS idx_event_expenses_event ON event_expenses(event_id);
 CREATE INDEX IF NOT EXISTS idx_bookmarks_user ON bookmarks(user_id);

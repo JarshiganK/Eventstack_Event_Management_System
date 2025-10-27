@@ -10,6 +10,7 @@ import EventNew from './routes/admin/EventNew'
 import EventEdit from './routes/admin/EventEdit'
 import OrganizerLogin from './routes/organizer/OrganizerLogin'
 import OrganizerDashboard from './routes/organizer/OrganizerDashboard'
+import EventExpenses from './routes/organizer/EventExpenses'
 import NavBar from './components/NavBar'
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/admin/events/:id/edit" element={<EventEdit />} />
           <Route path="/organizer/login" element={<OrganizerLogin />} />
           <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
+          <Route path="/organizer/events/:id/expenses" element={<EventExpenses />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

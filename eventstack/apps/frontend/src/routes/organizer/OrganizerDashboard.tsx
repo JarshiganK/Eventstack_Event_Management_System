@@ -228,6 +228,9 @@ export default function OrganizerDashboard() {
                     ) : null}
                   </div>
                   <div className="dashboard-event-card__actions">
+                    <Link to={`/organizer/events/${event.id}/expenses`} className="btn btn-outline btn-sm">
+                      Expenses
+                    </Link>
                     <Link to={`/admin/events/${event.id}/edit`} className="btn btn-ghost btn-sm">
                       Edit
                     </Link>

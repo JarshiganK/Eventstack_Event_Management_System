@@ -11,6 +11,9 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
   `);
   // Add a CHECK constraint if missing (Postgres will error if name clashes; use inline check in updates instead)
 
+  type CountRow = { count: string };
+  type CategoryRow = { category: string; count: string };
+
   // GET /api/admin/analytics - Get dashboard analytics
   app.get(
     "/admin/analytics",
@@ -54,7 +57,7 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
            ORDER BY count DESC, category ASC`
         );
 
-        const categoriesDistribution = categoriesResult.rows.map((row) => ({
+        const categoriesDistribution = categoriesResult.rows.map((row: CategoryRow) => ({          
           category: row.category,
           count: parseInt(row.count, 10),
         }));
@@ -107,11 +110,11 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
 
       // Prevent deleting the last admin role accidentally by demoting last admin
       if (body.role !== "ADMIN") {
-        const { rows } = await query<{ count: string }>(
+        const { rows } = await query<CountRow>(
           `SELECT COUNT(*) as count FROM users WHERE role='ADMIN' AND id <> $1`,
           [id]
         );
-        const remaining = parseInt(rows[0].count, 10);
+        const remaining = parseInt(rows[0]?.count ?? "0", 10);
         // If the target user is currently ADMIN and there are 0 other admins, block
         const { rows: targetRows } = await query<{ role: string }>(
           `SELECT role FROM users WHERE id=$1`,
@@ -160,11 +163,11 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
         return;
       }
       if (roleRows[0].role?.toUpperCase() === "ADMIN") {
-        const { rows } = await query<{ count: string }>(
+        const { rows } = await query<CountRow>(
           `SELECT COUNT(*) as count FROM users WHERE role='ADMIN' AND id<>$1`,
           [id]
         );
-        if (parseInt(rows[0].count, 10) === 0) {
+        if (parseInt(rows[0]?.count ?? "0", 10) === 0) {
           reply.code(400).send({ error: "Cannot delete the last admin" });
           return;
         }
