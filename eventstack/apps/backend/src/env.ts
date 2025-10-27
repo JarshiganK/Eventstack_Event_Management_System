@@ -8,7 +8,8 @@ const EnvSchema = z.object({
   PORT: z.preprocess((v) => Number(v), z.number().int().positive()).default(4000),
   DATABASE_URL: z.string().url().or(z.string().startsWith("postgres")),
   JWT_SECRET: z.string().min(6),
-  CORS_ORIGINS: z.string().default("http://localhost:5173")
+  CORS_ORIGINS: z.string().default("http://localhost:5173"),
+  GEMINI_API_KEY: z.string().optional()
 });
 
 export const env = EnvSchema.parse(process.env);

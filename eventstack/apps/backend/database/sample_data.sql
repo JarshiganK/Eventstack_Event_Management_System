@@ -29,6 +29,21 @@ INSERT INTO event_images (id, event_id, url, width, height, ord) VALUES
 ('img_a7','ev_a7','https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1280',1280,720,0),
 ('img_a8','ev_a8','https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=1280',1280,720,0);
 
+-- Event expenses sample rows
+INSERT INTO event_expenses (id, event_id, label, category, vendor, quantity, estimated_cost, actual_cost, status, incurred_on, notes) VALUES
+('exp_a1','ev_a1','Venue deposit','Venue','SV Convention',1,7500,7500,'PAID','2025-08-01','Advance paid to secure venue'),
+('exp_a2','ev_a1','Catering estimate','Food & Beverage','TasteLab',300,9500,0,'PLANNED',NULL,'Awaiting final headcount'),
+('exp_a3','ev_a7','Mentor honorarium','Talent','Tech Academy',5,4000,4000,'COMMITTED','2025-09-15','Contracts signed with mentors'),
+('exp_a4','ev_a7','Swag kits','Logistics','Print House',150,2250,0,'PLANNED',NULL,'T-shirts + notebooks for participants'),
+('exp_a5','ev_a2','Stage & sound','Production','River Production Co',1,6200,6200,'PAID','2025-06-01','Outdoor stage and PA system'),
+('exp_a6','ev_a2','Artist hospitality','Hospitality','City Catering',40,3200,0,'PLANNED',NULL,'Green room food + drinks'),
+('exp_a7','ev_a3','Pitch materials','Marketing','Print Square',150,900,900,'PAID','2025-09-10','Printed pitch books'),
+('exp_a8','ev_a3','Investor mixer','Food & Beverage','Urban Bites',60,2400,0,'COMMITTED','2025-10-20','Tapas + cocktails for networking'),
+('exp_a9','ev_a4','Tasting stations','Food & Beverage','Sommelier Lab',15,4800,0,'COMMITTED','2025-09-05','Wine and pairing logistics'),
+('exp_a10','ev_a5','Route permits','Logistics','City Council',1,1500,1500,'PAID','2025-07-01','Municipal fees'),
+('exp_a11','ev_a6','Gallery insurance','Insurance','Art Shield',1,2100,2100,'PAID','2025-09-20','Event liability coverage'),
+('exp_a12','ev_a8','House band','Talent','Blue Note Resident Band',1,3500,3500,'COMMITTED','2025-09-25','House band retainer');
+
 -- Bookmarks
 INSERT INTO bookmarks (id, user_id, event_id, created_at) VALUES
 ('bm_a1','u_user_1','ev_a1', NOW()),
