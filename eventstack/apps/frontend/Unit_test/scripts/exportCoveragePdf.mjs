@@ -11,7 +11,7 @@ async function generatePdf() {
     );
   }
 
-  const reportsDir = resolve(process.cwd(), "tests", "reports");
+  const reportsDir = resolve(process.cwd(), "Unit_test", "reports");
   mkdirSync(reportsDir, { recursive: true });
 
   const browser = await puppeteer.launch({ headless: "new" });

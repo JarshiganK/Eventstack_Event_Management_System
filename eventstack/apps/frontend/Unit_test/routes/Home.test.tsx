@@ -1,40 +1,45 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { MemoryRouter } from "react-router-dom";
-import { render, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import { MemoryRouter } from "react-router-dom"
+import { render, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 
 const apiMock = {
   listEvents: vi.fn().mockResolvedValue([]),
   search: vi.fn().mockResolvedValue({ results: [] }),
-};
+}
 
-vi.mock("../../src/lib/api.js", () => ({
+vi.mock("../../src/lib/api", () => ({
   api: apiMock,
-}));
+}))
 
 describe("routes/Home", () => {
   beforeEach(() => {
-    apiMock.listEvents.mockReset();
-    apiMock.search.mockReset();
-    localStorage.clear();
-    apiMock.listEvents.mockResolvedValue([]);
-    apiMock.search.mockResolvedValue({ results: [] });
-  });
+    vi.resetModules()
+    apiMock.listEvents.mockReset()
+    apiMock.search.mockReset()
+    apiMock.listEvents.mockResolvedValue([])
+    apiMock.search.mockResolvedValue({ results: [] })
+    localStorage.clear()
+  })
 
-  it("renders hero copy", async () => {
-    const Component = (await import("../../src/routes/Home.js")).default;
-    const { getByText } = render(
+  async function renderHome() {
+    const Component = (await import("../../src/routes/Home")).default
+    return render(
       <MemoryRouter>
         <Component />
       </MemoryRouter>
-    );
-    await waitFor(() => {
-      expect(getByText(/Discover and book experiences/).tagName).toBe("H1");
-    });
-  });
+    )
+  }
 
-  it("filters categories and performs search", async () => {
-    localStorage.setItem("home:categoryFiltersVisible", "true");
+  it("renders the hero headline", async () => {
+    const { getByText } = await renderHome()
+    await waitFor(() => {
+      expect(getByText(/Discover and book experiences/).tagName).toBe("H1")
+    })
+  })
+
+  it("filters by category and runs a debounced search", async () => {
+    localStorage.setItem("home:categoryFiltersVisible", "true")
     const events = [
       {
         id: "evt-1",
@@ -43,8 +48,8 @@ describe("routes/Home", () => {
         categories: ["music"],
         venue: { name: "Blue Hall" },
       },
-    ];
-    apiMock.listEvents.mockResolvedValue(events);
+    ]
+    apiMock.listEvents.mockResolvedValue(events)
     apiMock.search.mockResolvedValue({
       results: [
         {
@@ -53,66 +58,47 @@ describe("routes/Home", () => {
           startsAt: new Date().toISOString(),
         },
       ],
-    });
+    })
 
-    const user = userEvent.setup();
-    const Component = (await import("../../src/routes/Home.js")).default;
-    const { getByPlaceholderText, getByRole, findByText } = render(
-      <MemoryRouter>
-        <Component />
-      </MemoryRouter>
-    );
+    const user = userEvent.setup()
+    const { getByRole, getByPlaceholderText, findByText } = await renderHome()
 
-    await waitFor(() => expect(apiMock.listEvents).toHaveBeenCalled());
+    await waitFor(() => expect(apiMock.listEvents).toHaveBeenCalled())
 
-    const musicChip = getByRole("button", { name: "Music" });
-    await user.click(musicChip);
+    const musicChip = getByRole("button", { name: "Music" })
+    await user.click(musicChip)
+    expect(musicChip.getAttribute("aria-pressed")).toBe("true")
 
-    const input = getByPlaceholderText("Search by artist, venue or vibe");
-    await user.type(input, "Jazz");
-    await waitFor(() => expect(apiMock.search).toHaveBeenCalledWith(
-      "Jazz",
-      expect.objectContaining({})
-    ));
+    const input = getByPlaceholderText("Search by artist, venue or vibe")
+    await user.type(input, "Jazz")
+    await waitFor(() => expect(apiMock.search).toHaveBeenCalledWith("Jazz"))
 
-    expect(await findByText("Jazz Search")).toBeDefined();
+    expect(await findByText("Jazz Search")).toBeDefined()
+  })
 
-  });
+  it("renders empty state when events fail to load", async () => {
+    apiMock.listEvents.mockRejectedValueOnce(new Error("network"))
+    const { findByText } = await renderHome()
+    expect(await findByText(/No events in this vibe yet/)).toBeDefined()
+  })
 
-  it("shows fallback when event listing fails", async () => {
-    apiMock.listEvents.mockRejectedValueOnce(new Error("network"));
-    const Component = (await import("../../src/routes/Home.js")).default;
-    const { findByText } = render(
-      <MemoryRouter>
-        <Component />
-      </MemoryRouter>
-    );
+  it("shows search error messaging and avoids duplicate calls on empty submits", async () => {
+    apiMock.search.mockRejectedValueOnce(new Error("boom"))
 
-    expect(await findByText(/No events in this vibe yet/)).toBeDefined();
-  });
+    const { getByPlaceholderText, getByRole, findByText } = await renderHome()
+    const input = getByPlaceholderText("Search by artist, venue or vibe")
 
-  it("handles search errors gracefully", async () => {
-    apiMock.search.mockRejectedValueOnce(new Error("boom"));
-    const Component = (await import("../../src/routes/Home.js")).default;
-    const { getByPlaceholderText, getByRole, findByText } = render(
-      <MemoryRouter>
-        <Component />
-      </MemoryRouter>
-    );
+    await userEvent.type(input, "Comedy")
+    await waitFor(() => expect(apiMock.search).toHaveBeenCalledTimes(1))
+    expect(await findByText("We couldn't search right now. Please try again.")).toBeDefined()
 
-    const input = getByPlaceholderText("Search by artist, venue or vibe");
-    await userEvent.type(input, "Comedy");
-    await waitFor(() => expect(apiMock.search).toHaveBeenCalled());
+    await userEvent.clear(input)
+    await userEvent.click(getByRole("button", { name: "Search" }))
+    expect(apiMock.search).toHaveBeenCalledTimes(1)
+  })
 
-    expect(await findByText("We couldn't search right now. Please try again.")).toBeDefined();
-
-    await userEvent.clear(input);
-    await userEvent.click(getByRole("button", { name: "Search" }));
-    expect(apiMock.search).toHaveBeenCalledTimes(1);
-  });
-
-  it("responds to visibility events for category filters", async () => {
-    localStorage.setItem("home:categoryFiltersVisible", "true");
+  it("hides category chips when visibility events request it", async () => {
+    localStorage.setItem("home:categoryFiltersVisible", "true")
     apiMock.listEvents.mockResolvedValue([
       {
         id: "evt-1",
@@ -120,44 +106,34 @@ describe("routes/Home", () => {
         startsAt: new Date().toISOString(),
         categories: ["comedy"],
       },
-    ]);
+    ])
 
-    const Component = (await import("../../src/routes/Home.js")).default;
-    const { getByRole, findByRole, queryByRole } = render(
-      <MemoryRouter>
-        <Component />
-      </MemoryRouter>
-    );
+    const { findByRole, queryByRole } = await renderHome()
 
-    const comedyChip = await findByRole("button", { name: "Comedy" });
-    await userEvent.click(comedyChip);
-    expect(comedyChip.getAttribute("aria-pressed")).toBe("true");
+    const comedyChip = await findByRole("button", { name: "Comedy" })
+    await userEvent.click(comedyChip)
+    expect(comedyChip.getAttribute("aria-pressed")).toBe("true")
 
     window.dispatchEvent(
       new CustomEvent("homeCategoryFiltersVisibilityChanged", { detail: { value: false } })
-    );
+    )
 
-    await waitFor(() => expect(queryByRole("button", { name: "Comedy" })).toBeNull());
-  });
+    await waitFor(() => expect(queryByRole("button", { name: "Comedy" })).toBeNull())
+  })
 
-  it("reacts to storage events toggling filters", async () => {
-    const Component = (await import("../../src/routes/Home.js")).default;
-    const { getByRole } = render(
-      <MemoryRouter>
-        <Component />
-      </MemoryRouter>
-    );
+  it("reacts to storage events toggling the filters", async () => {
+    localStorage.setItem("home:categoryFiltersVisible", "true")
+    const { queryByRole } = await renderHome()
 
-    const allChip = getByRole("button", { name: "All vibes" });
-    expect(allChip.getAttribute("aria-pressed")).toBe("true");
+    expect(queryByRole("button", { name: "All vibes" })).not.toBeNull()
 
     window.dispatchEvent(
       new StorageEvent("storage", {
         key: "home:categoryFiltersVisible",
         newValue: "false",
       })
-    );
+    )
 
-    expect(allChip.getAttribute("aria-pressed")).toBe("true");
-  });
-});
+    await waitFor(() => expect(queryByRole("button", { name: "All vibes" })).toBeNull())
+  })
+})

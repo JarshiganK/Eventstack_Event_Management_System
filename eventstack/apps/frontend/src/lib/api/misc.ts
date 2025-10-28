@@ -21,12 +21,11 @@ export async function uploadFile(file: File) {
   return res.json() as Promise<{ url: string }>
 }
 
-export async function search(queryStr: string, filters?: { category?: string }) {
+export async function search(queryStr: string) {
   const q = (queryStr || '').trim()
   if (!q) return { results: [] as any[] }
   const qs = new URLSearchParams()
   qs.set('query', q)
-  if (filters?.category) qs.set('category', filters.category)
   return http<{ results: any[] }>(`/search?${qs.toString()}`)
 }
 

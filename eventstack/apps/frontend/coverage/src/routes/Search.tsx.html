@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">88.67% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>42/48</span>
+                <span class='fraction'>47/53</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">79.16% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>18/24</span>
+                <span class='fraction'>19/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>15/18</span>
+                <span class='fraction'>17/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">89.58% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/45</span>
+                <span class='fraction'>43/48</span>
             </div>
         
             
@@ -287,7 +287,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -299,8 +298,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -308,8 +305,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -322,6 +317,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
@@ -432,7 +432,7 @@ const normalize = (value: string) =&gt;
 export default function Search() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
-  
+&nbsp;
   const [results, setResults] = useState&lt;EventSummary[]&gt;([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -457,32 +457,27 @@ export default function Search() {
 &nbsp;
   
 &nbsp;
-  const run = useCallback(
-    async (term: string) =&gt; {
-      const trimmed = term.trim()
-      if (!trimmed) {
-        setResults([])
-        setError('')
-        setLoading(false)
-        return
-      }
+  const run = useCallback(async (term: string) =&gt; {
+    const trimmed = term.trim()
+    if (!trimmed) {
+      setResults([])
+      setError('')
+      setLoading(false)
+      return
+    }
 &nbsp;
-      setLoading(true)
-      try {
-        const res = await api.search(trimmed, {
-          category: category || <span class="branch-1 cbranch-no" title="branch not covered" >undefined</span>
-        })
-        setResults(res.results ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>
-        setError('')
-      } catch {
-<span class="cstat-no" title="statement not covered" >        setResults([])</span>
-<span class="cstat-no" title="statement not covered" >        setError("We couldn't search right now. Please try again.")</span>
-      } finally {
-        setLoading(false)
-      }
-    },
-    [category]
-  )
+    setLoading(true)
+    try {
+      const res = await api.search(trimmed)
+      setResults(res.results ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>
+      setError('')
+    } catch {
+<span class="cstat-no" title="statement not covered" >      setResults([])</span>
+<span class="cstat-no" title="statement not covered" >      setError("We couldn't search right now. Please try again.")</span>
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 &nbsp;
   useDebounce(query, 320, run)
 &nbsp;
@@ -494,6 +489,11 @@ export default function Search() {
   const onSelectChip = (value: string, setter: React.Dispatch&lt;React.SetStateAction&lt;string&gt;&gt;) =&gt; {
     setter(prev =&gt; (prev === value ? <span class="branch-0 cbranch-no" title="branch not covered" >'' : v</span>alue))
   }
+&nbsp;
+  const filteredResults = useMemo(() =&gt; {
+    if (!category) return results
+    return results.filter(event =&gt; event.categories?.includes(category))
+  }, [category, results])
 &nbsp;
   return (
     &lt;main className="page"&gt;
@@ -554,9 +554,9 @@ export default function Search() {
               &lt;/div&gt;
             ))}
           &lt;/div&gt;
-        ) : results.length ? (
+        ) : filteredResults.length ? (
           &lt;div className="grid"&gt;
-            {results.map(result =&gt; (
+            {filteredResults.map(result =&gt; (
               &lt;EventCard key={`${result.id ?? <span class="branch-1 cbranch-no" title="branch not covered" >result.title}</span>-${result.startsAt}`} event={result} /&gt;
             ))}
           &lt;/div&gt;
@@ -583,7 +583,7 @@ export default function Search() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-27T08:49:16.788Z
+                at 2025-10-28T09:19:15.774Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

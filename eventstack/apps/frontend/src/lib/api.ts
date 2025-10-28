@@ -2,7 +2,6 @@ import * as auth from "./api/auth"
 import * as events from "./api/events"
 import * as expenses from "./api/expenses"
 import * as bot from "./api/bot"
-// venues API removed - events store venue_name directly
 import * as misc from "./api/misc"
 import * as admin from "./api/admin"
 
@@ -11,8 +10,6 @@ export const api = {
   login: auth.login,
   register: auth.register,
   me: auth.me,
-
-  // venues: removed — events now store venueName directly
 
   // events
   listEvents: events.listEvents,
@@ -33,7 +30,6 @@ export const api = {
   removeBookmark: misc.removeBookmark,
   uploadFile: misc.uploadFile,
   search: misc.search,
-  notifications: misc.notifications,
 
   // admin
   getAnalytics: admin.getAnalytics,

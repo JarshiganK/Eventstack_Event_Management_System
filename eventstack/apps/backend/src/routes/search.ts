@@ -4,8 +4,7 @@ import { query } from "../db.js";
 
 export default async function searchRoutes(app: FastifyInstance) {
   const qSchema = z.object({
-    query: z.string().optional().default(""),
-    category: z.string().optional().default("")
+    query: z.string().optional().default("")
   });
 
   app.get("/search", async (req) => {
@@ -16,12 +15,7 @@ export default async function searchRoutes(app: FastifyInstance) {
     }
 
     const params: any[] = [search];
-    let where = `lower(e.searchable) LIKE '%' || lower($1) || '%'`;
-    if (q.category) {
-      params.push(q.category);
-      where += ` AND $${params.length} = ANY(e.categories)`;
-    }
-
+    const where = `lower(e.searchable) LIKE '%' || lower($1) || '%'`;
     const { rows } = await query(
       `SELECT e.*, (SELECT url FROM event_images i WHERE i.event_id=e.id ORDER BY ord ASC LIMIT 1) as cover_url
        FROM events e

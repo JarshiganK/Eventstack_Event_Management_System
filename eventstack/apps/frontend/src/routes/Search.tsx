@@ -25,7 +25,7 @@ const normalize = (value: string) =>
 export default function Search() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
-  
+
   const [results, setResults] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -50,32 +50,27 @@ export default function Search() {
 
   
 
-  const run = useCallback(
-    async (term: string) => {
-      const trimmed = term.trim()
-      if (!trimmed) {
-        setResults([])
-        setError('')
-        setLoading(false)
-        return
-      }
+  const run = useCallback(async (term: string) => {
+    const trimmed = term.trim()
+    if (!trimmed) {
+      setResults([])
+      setError('')
+      setLoading(false)
+      return
+    }
 
-      setLoading(true)
-      try {
-        const res = await api.search(trimmed, {
-          category: category || undefined
-        })
-        setResults(res.results ?? [])
-        setError('')
-      } catch {
-        setResults([])
-        setError("We couldn't search right now. Please try again.")
-      } finally {
-        setLoading(false)
-      }
-    },
-    [category]
-  )
+    setLoading(true)
+    try {
+      const res = await api.search(trimmed)
+      setResults(res.results ?? [])
+      setError('')
+    } catch {
+      setResults([])
+      setError("We couldn't search right now. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useDebounce(query, 320, run)
 
@@ -87,6 +82,11 @@ export default function Search() {
   const onSelectChip = (value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
     setter(prev => (prev === value ? '' : value))
   }
+
+  const filteredResults = useMemo(() => {
+    if (!category) return results
+    return results.filter(event => event.categories?.includes(category))
+  }, [category, results])
 
   return (
     <main className="page">
@@ -147,9 +147,9 @@ export default function Search() {
               </div>
             ))}
           </div>
-        ) : results.length ? (
+        ) : filteredResults.length ? (
           <div className="grid">
-            {results.map(result => (
+            {filteredResults.map(result => (
               <EventCard key={`${result.id ?? result.title}-${result.startsAt}`} event={result} />
             ))}
           </div>
