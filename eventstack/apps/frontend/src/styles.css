@@ -2196,42 +2196,151 @@ button[disabled],
 
 .budget-bot {
   position: fixed;
-  bottom: 28px;
+  bottom: 24px;
   right: 24px;
-  z-index: 50;
+  z-index: 60;
+  pointer-events: none;
 }
 
-.budget-bot__toggle {
-  border-radius: 999px;
-  padding: 12px 20px;
-  border: none;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: #fff;
+.budget-bot__launcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(135deg, #ffffff, #e0f2fe);
+  color: #0f172a;
   font-weight: 600;
-  box-shadow: var(--shadow-2);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  transition: transform var(--anim-fast), box-shadow var(--anim-fast), opacity var(--anim-fast);
+}
+
+.budget-bot__launcher:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.24);
+}
+
+.budget-bot__launcher:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
+}
+
+.budget-bot__launcher--hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.budget-bot__launcher-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(79, 70, 229, 0.12);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+}
+
+.budget-bot__launcher-copy {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+}
+
+.budget-bot__launcher-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.budget-bot__launcher-label {
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .budget-bot__panel {
-  width: min(420px, 90vw);
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  pointer-events: none;
+  width: min(440px, calc(100vw - 48px));
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: var(--shadow-2);
+  gap: 18px;
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(224, 242, 254, 0.95));
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 32px 90px rgba(15, 23, 42, 0.26);
+  color: #0f172a;
+  transform-origin: bottom right;
+  transform: translateY(16px) scale(0.94);
+  opacity: 0;
+  max-height: min(75vh, 620px);
+  overflow: hidden;
+  transition: transform 260ms var(--easing), opacity 260ms var(--easing), box-shadow 260ms var(--easing);
+}
+
+.budget-bot--open .budget-bot__panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.budget-bot--closing .budget-bot__panel {
+  opacity: 0;
+  transform: translateY(12px) scale(0.92);
+  pointer-events: none;
 }
 
 .budget-bot__header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 12px;
-  align-items: center;
+}
+
+.budget-bot__header h3 {
+  margin: 4px 0 0;
+  font-size: 20px;
 }
 
 .budget-bot__eyebrow {
-  font-size: 12px;
+  margin: 0;
+  font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-muted);
-  margin: 0;
+  color: #64748b;
+}
+
+.budget-bot__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: rgba(79, 70, 229, 0.12);
+  color: #312e81;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--anim-fast), color var(--anim-fast);
+}
+
+.budget-bot__close:hover {
+  background: rgba(79, 70, 229, 0.18);
+  color: #1e1b4b;
+}
+
+.budget-bot__close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
 }
 
 .budget-bot__quick-prompts {
@@ -2240,55 +2349,126 @@ button[disabled],
   gap: 8px;
 }
 
+.budget-bot__prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.04);
+  color: #0f172a;
+  font-size: 13px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background var(--anim-fast), border-color var(--anim-fast), transform var(--anim-fast);
+}
+
+.budget-bot__prompt:hover {
+  background: rgba(79, 70, 229, 0.1);
+  border-color: rgba(79, 70, 229, 0.2);
+  transform: translateY(-1px);
+}
+
+.budget-bot__prompt:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .budget-bot__conversation {
-  max-height: 260px;
+  flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding-right: 4px;
+  min-height: 180px;
+}
+
+.budget-bot__conversation--expanded {
+  min-height: 240px;
 }
 
 .budget-bot__placeholder {
   margin: 0;
-  color: var(--color-muted);
+  color: #475569;
   font-size: 14px;
 }
 
 .budget-bot__message {
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
   display: grid;
-  gap: 6px;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.7);
+  color: inherit;
 }
 
 .budget-bot__message--assistant {
-  background: rgba(79, 70, 229, 0.08);
+  background: rgba(79, 70, 229, 0.12);
+  border-color: rgba(79, 70, 229, 0.24);
+}
+
+.budget-bot__message--user {
+  background: #ffffff;
+  border-color: rgba(37, 99, 235, 0.18);
+  margin-left: auto;
 }
 
 .budget-bot__message-role {
   font-size: 11px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: #64748b;
+}
+
+.budget-bot__message-text {
+  margin: 0;
+  line-height: 1.45;
+  white-space: pre-line;
 }
 
 .budget-bot__typing {
   font-size: 13px;
-  color: var(--color-muted);
+  color: #475569;
 }
 
 .budget-bot__input {
   display: flex;
   gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
 .budget-bot__input input {
   flex: 1;
-  border-radius: var(--radius);
-  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
   padding: 10px 12px;
-  background: var(--color-surface);
-  color: var(--color-text);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.budget-bot__input input:focus-visible {
+  outline: none;
+  border-color: rgba(79, 70, 229, 0.35);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+}
+
+.budget-bot__input .btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .budget-bot {
+    right: 16px;
+  }
+
+  .budget-bot__panel {
+    left: 16px;
+    width: 100%;
+  }
 }
