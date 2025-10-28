@@ -20,7 +20,6 @@ type EventSummary = {
 const HOME_SEARCH_ID = 'home-search'
 const ALL = 'ALL'
 
-/** Transform stored category keys into user-friendly labels. */
 const normalizeCategory = (value: string) =>
   value
     .replace(/[_-]+/g, ' ')
@@ -28,29 +27,29 @@ const normalizeCategory = (value: string) =>
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ')
 
-/** Fetch events once and expose derived data (filters, stats) needed by the page. */
-function useEventCatalog() {
+export default function Home() {
   const [events, setEvents] = useState<EventSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState<string>(ALL)
+  const [showCategoryFilters, setShowCategoryFilters] = useState(() => getHomeCategoryFiltersVisible())
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchValue, setSearchValue] = useState('')
+  const [searchCategory, setSearchCategory] = useState('')
+  
+  const [searchResults, setSearchResults] = useState<EventSummary[]>([])
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [searchError, setSearchError] = useState('')
+
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    let mounted = true
     setLoading(true)
     api
       .listEvents()
-      .then(data => {
-        if (mounted) setEvents(data)
-      })
-      .catch(() => {
-        if (mounted) setEvents([])
-      })
-      .finally(() => {
-        if (mounted) setLoading(false)
-      })
-    return () => {
-      mounted = false
-    }
+      .then(setEvents)
+      .catch(() => setEvents([]))
+      .finally(() => setLoading(false))
   }, [])
 
   const categories = useMemo(() => {
@@ -78,36 +77,55 @@ function useEventCatalog() {
     return { total, upcoming }
   }, [filteredEvents])
 
-  const resetCategory = useCallback(() => setActiveCategory(ALL), [])
+  const runSearch = useCallback(
+    async (query: string) => {
+      const term = query.trim()
+      if (!term) {
+        setSearchResults([])
+        setSearchError('')
+        setSearchLoading(false)
+        return
+      }
 
-  return {
-    loading,
-    categories,
-    filteredEvents,
-    stats,
-    activeCategory,
-    setActiveCategory,
-    resetCategory,
-  }
-}
+      setSearchLoading(true)
+      try {
+        const res = await api.search(term, {
+          category: searchCategory.trim() || undefined
+        })
+        setSearchResults(res.results ?? [])
+        setSearchError('')
+      } catch {
+        setSearchResults([])
+        setSearchError("We couldn't search right now. Please try again.")
+      } finally {
+        setSearchLoading(false)
+      }
+    },
+    [searchCategory]
+  )
 
-/** Keep the category chip visibility in sync across tabs and refreshes. */
-function useCategoryFiltersVisibility() {
-  const [visible, setVisible] = useState(() => getHomeCategoryFiltersVisible())
+  useDebounce(searchValue, 320, runSearch)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return undefined
+    if (searchParams.has('search')) {
+      searchInputRef.current?.focus({ preventScroll: true })
+      document.getElementById(HOME_SEARCH_ID)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
 
     const handleVisibilityEvent = (event: Event) => {
       const detail = (event as CustomEvent<{ value?: boolean }>).detail
       if (typeof detail?.value === 'boolean') {
-        setVisible(detail.value)
+        setShowCategoryFilters(detail.value)
       }
     }
 
     const handleStorage = (event: StorageEvent) => {
       if (event.key !== HOME_CATEGORY_FILTERS_VISIBILITY.STORAGE_KEY) return
-      setVisible(event.newValue !== 'false')
+      setShowCategoryFilters(event.newValue !== 'false')
     }
 
     window.addEventListener(HOME_CATEGORY_FILTERS_VISIBILITY.EVENT, handleVisibilityEvent)
@@ -119,48 +137,11 @@ function useCategoryFiltersVisibility() {
     }
   }, [])
 
-  return visible
-}
-
-/** Manage search state, including debounced API requests and URL synchronisation. */
-function useSearchPanel() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [searchValue, setSearchValue] = useState('')
-  const [searchResults, setSearchResults] = useState<EventSummary[]>([])
-  const [searchLoading, setSearchLoading] = useState(false)
-  const [searchError, setSearchError] = useState('')
-  const searchInputRef = useRef<HTMLInputElement>(null)
-
-  const runSearch = useCallback(async (query: string) => {
-    const term = query.trim()
-    if (!term) {
-      setSearchResults([])
-      setSearchError('')
-      setSearchLoading(false)
-      return
-    }
-
-    setSearchLoading(true)
-    try {
-      const res = await api.search(term)
-      setSearchResults(res.results ?? [])
-      setSearchError('')
-    } catch {
-      setSearchResults([])
-      setSearchError("We couldn't search right now. Please try again.")
-    } finally {
-      setSearchLoading(false)
-    }
-  }, [])
-
-  useDebounce(searchValue, 320, runSearch)
-
   useEffect(() => {
-    if (searchParams.has('search')) {
-      searchInputRef.current?.focus({ preventScroll: true })
-      document.getElementById(HOME_SEARCH_ID)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (!showCategoryFilters) {
+      setActiveCategory(ALL)
     }
-  }, [searchParams])
+  }, [showCategoryFilters])
 
   const handleSubmitSearch = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -181,46 +162,6 @@ function useSearchPanel() {
 
   const showSearchState =
     Boolean(searchValue.trim()) || searchLoading || Boolean(searchResults.length) || Boolean(searchError)
-
-  return {
-    searchValue,
-    setSearchValue,
-    searchResults,
-    searchLoading,
-    searchError,
-    showSearchState,
-    handleSubmitSearch,
-    searchInputRef,
-  }
-}
-
-export default function Home() {
-  const {
-    loading,
-    categories,
-    filteredEvents,
-    stats,
-    activeCategory,
-    setActiveCategory,
-    resetCategory,
-  } = useEventCatalog()
-  const showCategoryFilters = useCategoryFiltersVisibility()
-  const {
-    searchValue,
-    setSearchValue,
-    searchResults,
-    searchLoading,
-    searchError,
-    showSearchState,
-    handleSubmitSearch,
-    searchInputRef,
-  } = useSearchPanel()
-
-  useEffect(() => {
-    if (!showCategoryFilters) {
-      resetCategory()
-    }
-  }, [showCategoryFilters, resetCategory])
 
   return (
     <main className="page">
@@ -299,6 +240,17 @@ export default function Home() {
                 Search
               </button>
             </div>
+            <div className="search-panel__filters">
+              <label className="field">
+                <span>Category</span>
+                <input
+                  className="form-input"
+                  placeholder="Eg. Comedy"
+                  value={searchCategory}
+                  onChange={event => setSearchCategory(event.target.value)}
+                />
+              </label>
+            </div>
           </form>
           {searchError ? <div className="alert alert--danger">{searchError}</div> : null}
         </div>
@@ -358,4 +310,3 @@ export default function Home() {
     </main>
   )
 }
-

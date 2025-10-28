@@ -21,16 +21,12 @@ export async function uploadFile(file: File) {
   return res.json() as Promise<{ url: string }>
 }
 
-export async function search(queryStr: string) {
+export async function search(queryStr: string, filters?: { category?: string }) {
   const q = (queryStr || '').trim()
   if (!q) return { results: [] as any[] }
   const qs = new URLSearchParams()
   qs.set('query', q)
+  if (filters?.category) qs.set('category', filters.category)
   return http<{ results: any[] }>(`/search?${qs.toString()}`)
 }
 
-export async function notifications(userId: string) {
-  const res = await fetch(`${(import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'}/notifications/user/${encodeURIComponent(userId)}`, { headers: { ...authHeader() } })
-  if (!res.ok) throw new Error(await res.text())
-  return res.json() as Promise<any[]>
-}
