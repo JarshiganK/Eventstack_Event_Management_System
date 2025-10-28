@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       include,
       coverage: {
         provider: "v8",
-        reporter: ["text", "html"],
+        reporter: ["text", "json-summary"],
         reportsDirectory,
       },
     },

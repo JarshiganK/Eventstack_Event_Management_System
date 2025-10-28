@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
       setupFiles: ["./tests/Unit_test/setup.ts"],
       coverage: {
         provider: "v8",
-        reporter: ["text", "html"],
+        reporter: ["text", "json-summary"],
         reportsDirectory,
       },
     },
