@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,14 +130,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,11 +141,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { http } from "../http"
 &nbsp;
@@ -180,20 +180,20 @@ export async function listUsers(opts?: { role?: 'ADMIN' | 'USER' | 'ORGANIZER' }
   return http(`/admin/users${qs}`)
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >listOrganizers(): Promise&lt;AdminUser[]&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return listUsers({ role: 'ORGANIZER' })</span>
+export async function listOrganizers(): Promise&lt;AdminUser[]&gt; {
+  return listUsers({ role: 'ORGANIZER' })
 }
 &nbsp;
 export async function updateUserRole(id: string, role: 'ADMIN' | 'USER' | 'ORGANIZER') {
   return http(`/admin/users/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role }) })
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >updateUserStatus(i</span>d: string, status: 'ACTIVE' | 'SUSPENDED') {
-<span class="cstat-no" title="statement not covered" >  return http(`/admin/users/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) })</span>
+export async function updateUserStatus(id: string, status: 'ACTIVE' | 'SUSPENDED') {
+  return http(`/admin/users/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) })
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >deleteUser(i</span>d: string) {
-<span class="cstat-no" title="statement not covered" >  return http(`/admin/users/${id}`, { method: 'DELETE' })</span>
+export async function deleteUser(id: string) {
+  return http(`/admin/users/${id}`, { method: 'DELETE' })
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -202,7 +202,7 @@ export async function <span class="fstat-no" title="function not covered" >delet
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T18:21:24.498Z
+                at 2025-10-27T08:49:16.788Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

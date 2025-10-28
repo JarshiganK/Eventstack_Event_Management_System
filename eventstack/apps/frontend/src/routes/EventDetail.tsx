@@ -175,14 +175,14 @@ export default function EventDetail() {
           <h1 className="hero-title">{event.title}</h1>
           <div className="event-meta">
             <div className="event-meta-row">
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <svg className="icon--white" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                 <path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V8h14zm-6-7h-3v4H8V9h5z" />
               </svg>
               <span>{dateMeta.time}</span>
             </div>
             {event.venue?.name ? (
               <div className="event-meta-row">
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <svg className="icon--white" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                   <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5Z" />
                 </svg>
                 <span>{event.venue.name}</span>
