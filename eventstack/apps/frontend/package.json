@@ -9,8 +9,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "testu": "vitest run --mode unit --coverage",
+    "testi": "vitest run --mode integration --coverage",
     "test:coverage": "vitest run --coverage",
-    "test:report": "npm run test:coverage && node Unit_test/scripts/exportCoveragePdf.mjs"
+    "test:report": "npm run testu && node tests/Unit_test/scripts/exportCoveragePdf.mjs && npm run testi && node tests/Integration_test/scripts/exportCoveragePdf.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
