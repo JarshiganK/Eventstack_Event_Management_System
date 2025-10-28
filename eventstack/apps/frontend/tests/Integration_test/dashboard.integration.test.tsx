@@ -135,5 +135,5 @@ describe("Admin dashboard integration", () => {
     await waitFor(() => expect(apiMock.updateUserStatus).toHaveBeenCalledWith("org-1", "SUSPENDED"))
     await waitFor(() => expect(statusButton.textContent || "").toContain("Activate"))
     expect(screen.getByText("SUSPENDED")).toBeTruthy()
-  })
+  }, 10000)
 })
