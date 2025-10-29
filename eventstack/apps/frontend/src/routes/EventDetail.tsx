@@ -1,9 +1,15 @@
+// React hooks for managing state and side effects
 import { useEffect, useMemo, useState } from 'react'
+// Router hook to get the event ID from the URL
 import { useParams } from 'react-router-dom'
+// Component for going back to the previous page
 import BackLink from '../components/BackLink'
+// API functions for talking to the backend
 import { api } from '../lib/api'
+// Functions for saving bookmarks locally when the server is down
 import { addLocalBookmark, getLocalBookmarks, removeLocalBookmark } from '../lib/storage'
 
+// What an event looks like when we get it from the server
 type EventDetailData = {
   id: string
   title: string
@@ -16,18 +22,21 @@ type EventDetailData = {
   images?: Array<{ url: string }>
 }
 
+// Makes dates look nice (like "Monday, January 15")
 const formatDate = (value: string, options?: Intl.DateTimeFormatOptions) => {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return null
   return date.toLocaleDateString(undefined, options)
 }
 
+// Makes times look nice (like "7:30 PM")
 const formatTime = (value: string) => {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return null
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
+// Makes category names look nice (turns "rock_music" into "Rock Music")
 const normalizeCategory = (value: string) =>
   value
     .replace(/[_-]+/g, ' ')
@@ -36,12 +45,16 @@ const normalizeCategory = (value: string) =>
     .join(' ')
 
 export default function EventDetail() {
+  // Get the event ID from the URL
   const { id = '' } = useParams()
+  
+  // Keep track of the event data we loaded
   const [event, setEvent] = useState<EventDetailData | null>(null)
   const [bookmarked, setBookmarked] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  // Load the event when the page first loads
   useEffect(() => {
     if (!id) return
     setLoading(true)
@@ -50,6 +63,7 @@ export default function EventDetail() {
       .getEvent(id)
       .then(data => {
         setEvent(data)
+        // Check if this event is already bookmarked locally
         const local = getLocalBookmarks().some(b => b.id === id)
         setBookmarked(local)
       })
@@ -60,6 +74,7 @@ export default function EventDetail() {
       .finally(() => setLoading(false))
   }, [id])
 
+  // Format the date and time nicely for display
   const dateMeta = useMemo(() => {
     if (!event) return { main: 'Date to be announced', time: 'Time to be announced' }
     const startDate = formatDate(event.startsAt, { weekday: 'long', month: 'long', day: 'numeric' })
@@ -71,6 +86,7 @@ export default function EventDetail() {
     }
   }, [event])
 
+  // Handle bookmarking/unbookmarking the event
   const handleBookmark = async () => {
     if (!event) return
     try {
@@ -82,6 +98,7 @@ export default function EventDetail() {
         setBookmarked(true)
       }
     } catch {
+      // If the server is down, save the bookmark locally instead
       if (bookmarked) {
         removeLocalBookmark(event.id)
         setBookmarked(false)
@@ -94,6 +111,7 @@ export default function EventDetail() {
 
   // Directions removed per create-flow simplification request
 
+  // Handle sharing the event
   const handleShare = async () => {
     if (!event) return
     const shareData = {
@@ -102,13 +120,16 @@ export default function EventDetail() {
       url: window.location.href,
     }
     if (navigator.share) {
+      // Use the native share dialog if available
       await navigator.share(shareData)
     } else if (navigator.clipboard) {
+      // Otherwise just copy the link to clipboard
       await navigator.clipboard.writeText(shareData.url)
       alert('Link copied to clipboard')
     }
   }
 
+  // Handle adding the event to Google Calendar
   const handleCalendar = () => {
     if (!event) return
     const start = new Date(event.startsAt).toISOString().replace(/[-:]/g, '').split('.')[0]
@@ -122,7 +143,7 @@ export default function EventDetail() {
     window.open(calendarUrl, '_blank', 'noopener')
   }
 
-  // Resolve backend-hosted upload URLs (paths like '/uploads/xxx') to full URLs
+  // Helper function to make sure image URLs work properly
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'
   const API_HOST = API_BASE.replace(/\/api\/?$/, '')
   const resolveUrl = (u?: string) => {
@@ -132,18 +153,9 @@ export default function EventDetail() {
     return u
   }
 
-  if (loading) {
-    return (
-      <main className="page">
-        <div className="skeleton-card">
-          <div className="skeleton-card__media shimmer" />
-          <div className="skeleton-card__line shimmer" />
-          <div className="skeleton-card__line shimmer" />
-        </div>
-      </main>
-    )
-  }
 
+
+  // Show error message if we couldn't load the event
   if (!event) {
     return (
       <main className="page">
@@ -160,7 +172,7 @@ export default function EventDetail() {
     <main className="page stack">
       <BackLink className="mb-4" />
 
-      {/* Show coverUrl or fall back to first gallery image */}
+      {/* Show the main event image */}
       <div className="cover-wrapper" role="img" aria-label={event.title}>
         {((event.coverUrl && resolveUrl(event.coverUrl)) || (event.images && event.images[0]?.url)) ? (
           <img src={resolveUrl(event.coverUrl || event.images?.[0]?.url)} alt={event.title} loading="lazy" />
@@ -169,6 +181,7 @@ export default function EventDetail() {
         )}
       </div>
 
+      {/* Main event information */}
       <section className="stack">
         <div className="stack">
           <span className="eyebrow">{dateMeta.main}</span>
@@ -191,6 +204,7 @@ export default function EventDetail() {
           </div>
         </div>
 
+        {/* Show category tags if available */}
         {event.categories?.length ? (
           <div className="tag-row" role="list">
             {event.categories.map(category => (
@@ -201,6 +215,7 @@ export default function EventDetail() {
           </div>
         ) : null}
 
+        {/* Action buttons */}
         <div className="cta-row">
           <button type="button" className="btn btn-primary" onClick={handleBookmark}>
             {bookmarked ? 'Remove bookmark' : 'Bookmark'}
@@ -215,6 +230,7 @@ export default function EventDetail() {
         </div>
       </section>
 
+      {/* Event description section */}
       {event.summary ? (
         <section className="surface">
           <div className="stack">
@@ -224,6 +240,7 @@ export default function EventDetail() {
         </section>
       ) : null}
 
+      {/* Schedule and venue information */}
       <section className="grid">
         <div className="surface">
           <div className="stack">
@@ -246,6 +263,7 @@ export default function EventDetail() {
         </div>
       </section>
 
+      {/* Event gallery images */}
       {event.images?.length ? (
         <section className="grid">
           {event.images.map((image, index) => (
