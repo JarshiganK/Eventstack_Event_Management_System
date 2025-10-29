@@ -109,7 +109,6 @@ export default function EventDetail() {
     }
   }
 
-  // Directions removed per create-flow simplification request
 
   // Handle sharing the event
   const handleShare = async () => {
@@ -220,7 +219,7 @@ export default function EventDetail() {
           <button type="button" className="btn btn-primary" onClick={handleBookmark}>
             {bookmarked ? 'Remove bookmark' : 'Bookmark'}
           </button>
-          {/* Directions removed */}
+          
           <button type="button" className="btn btn-outline" onClick={handleShare}>
             Share
           </button>
