@@ -142,6 +142,17 @@ export default function EventDetail() {
     window.open(calendarUrl, '_blank', 'noopener')
   }
 
+
+  const handleDirections = () => {
+    if (!event?.venue?.name) return
+    
+   
+    const encodedVenue = encodeURIComponent(event.venue.name)
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedVenue}`
+    window.open(mapsUrl, '_blank', 'noopener')
+  }
+
+
   // Helper function to make sure image URLs work properly
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'
   const API_HOST = API_BASE.replace(/\/api\/?$/, '')
