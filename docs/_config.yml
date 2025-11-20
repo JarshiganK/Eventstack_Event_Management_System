@@ -1,0 +1,17 @@
+# This theme is based on https://github.com/jekyll/minima
+# Please refer above link to know the available configurations
+
+title: "EventStack - Event Management System"
+remote_theme: cepdnaclk/eYY-project-theme
+description: "EventStack is a full-stack event management platform with role-based access for Users, Organizers, and Admins. It supports event discovery, event creation, expense tracking, Budget Bot insights, and complete system administration."
+markdown: kramdown
+
+kramdown:
+  parse_block_html: true
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Enable mermaid diagrams
+mermaid:
+  enabled: true
