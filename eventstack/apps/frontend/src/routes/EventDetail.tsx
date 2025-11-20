@@ -143,15 +143,16 @@ export default function EventDetail() {
     window.open(calendarUrl, '_blank', 'noopener')
   }
 
-  // Handle opening Google Maps with directions to the venue
+
   const handleDirections = () => {
     if (!event?.venue?.name) return
     
-    // Search by venue name in Google Maps
+   
     const encodedVenue = encodeURIComponent(event.venue.name)
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedVenue}`
     window.open(mapsUrl, '_blank', 'noopener')
   }
+
 
   // Helper function to make sure image URLs work properly
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:4000/api'
@@ -231,8 +232,10 @@ export default function EventDetail() {
             {bookmarked ? 'Remove bookmark' : 'Bookmark'}
           </button>
           {event.venue?.name ? (
-            <button type="button" className="btn btn-outline" onClick={handleDirections}>
-              Directions
+            <button>
+              <button type="button" className="btn btn-primary" onClick={handleDirections}>
+                Direction
+              </button>
             </button>
           ) : null}
           <button type="button" className="btn btn-outline" onClick={handleShare}>

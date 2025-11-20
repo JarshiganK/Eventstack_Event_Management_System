@@ -1,11 +1,12 @@
 -- Sample data for EventStack (safe minimal set)
--- Password for all sample users should be set via your app; here we only create identities.
+-- Note: Admin user (admin@eventstack.com / admin123) is created automatically in schema.sql
+-- Password for sample users should be set via your app; here we only create identities.
 
--- Users
+-- Users (excluding admin which is in schema.sql)
 INSERT INTO users (id, email, password_hash, role, created_at) VALUES
-('u_admin_1','admin@eventstack.com','$2b$10$Lxg2M2p6n0qv0yXQ6iB9ueO0xJt0a0H0Y3eK0f4yT8Sx1d9pO3x8S','ADMIN', NOW()),
 ('u_org_1','organizer@eventstack.com','$2b$10$Lxg2M2p6n0qv0yXQ6iB9ueO0xJt0a0H0Y3eK0f4yT8Sx1d9pO3x8S','ORGANIZER', NOW()),
-('u_user_1','user1@example.com','$2b$10$Lxg2M2p6n0qv0yXQ6iB9ueO0xJt0a0H0Y3eK0f4yT8Sx1d9pO3x8S','USER', NOW());
+('u_user_1','user1@example.com','$2b$10$Lxg2M2p6n0qv0yXQ6iB9ueO0xJt0a0H0Y3eK0f4yT8Sx1d9pO3x8S','USER', NOW())
+ON CONFLICT (email) DO NOTHING;
 
 -- Events (ids: ev_a1 .. ev_a8)
 INSERT INTO events (id, title, summary, starts_at, ends_at, venue_name, categories, searchable, created_at, updated_at) VALUES
