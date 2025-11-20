@@ -1,45 +1,5 @@
 # EventStack User Manual
 
-**Document Version:** 1.0  
-**Publication Date:** January 2025  
-**System Version:** 1.0.0  
-**Platform:** EventStack - Event Management Platform
-
----
-
-## Document Information
-
-| Field | Information |
-|-------|-------------|
-| **Document Title** | EventStack User Manual |
-| **Version** | 1.0 |
-| **Date** | January 2025 |
-| **Classification** | User Documentation |
-| **Target Audience** | End Users, Administrators, Event Organizers |
-| **Format** | PDF (Recommended) |
-
----
-
-## Development Team
-
-**Group Members:**
-- [Member 1 Index Number] - [Name]
-- [Member 2 Index Number] - [Name]
-- [Member 3 Index Number] - [Name]
-- [Member 4 Index Number] - [Name]
-
----
-
-## Copyright and Disclaimer
-
-© 2025 EventStack Development Team. All rights reserved.
-
-This document contains proprietary and confidential information. The information in this manual is subject to change without notice. The development team assumes no responsibility for any errors or omissions in this documentation.
-
-**Template Reference:** This manual follows documentation standards from Microsoft Technical Documentation and GitHub open-source project guidelines.
-
----
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
@@ -210,8 +170,6 @@ git clone [repository-url]
 cd eventstack
 ```
 
-**Screenshot Placeholder:** [Screenshot showing the project directory structure]
-
 #### Step 2: Configure Database Credentials (Optional)
 
 The deployment script uses default values, but you can customize them. Open PowerShell and navigate to the project directory, then run the script with your parameters:
@@ -228,7 +186,7 @@ The deployment script uses default values, but you can customize them. Open Powe
 - Backend Port: `4000`
 - Frontend Port: `5173`
 
-**Screenshot Placeholder:** [Screenshot showing PowerShell with script parameters]
+
 
 #### Step 3: Run the Deployment Script
 
