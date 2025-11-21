@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td align="left" valign="middle">
-        <img src="images/sample.png" alt="University of Peradeniya Logo" width="100" height="100" style="border-radius: 50%;"/>
+        <img src="images/images.png" alt="University of Peradeniya Logo" width="100" height="100" style="border-radius: 50%;"/>
       </td>
       <td align="left" valign="middle" style="padding-left: 20px;">
         <p style="margin: 0; font-family: serif; font-size: 18px; font-weight: bold;">
