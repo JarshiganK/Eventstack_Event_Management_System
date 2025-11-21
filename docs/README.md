@@ -1,20 +1,4 @@
-<div align="center">
-  <table>
-    <tr>
-      <td align="left" valign="middle">
-        <img src="images/12.png" alt="University of Peradeniya Logo" width="100" height="100" style="border-radius: 50%;"/>
-      </td>
-      <td align="left" valign="middle" style="padding-left: 20px;">
-        <p style="margin: 0; font-family: serif; font-size: 18px; font-weight: bold;">
-          Projects - Department of Computer Engineering<br/>
-          University of Peradeniya, Sri Lanka
-        </p>
-      </td>
-    </tr>
-  </table>
-</div>
 
-<hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;"/>
 
 # EventStack
 
