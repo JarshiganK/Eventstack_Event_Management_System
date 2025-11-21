@@ -3,8 +3,7 @@
 
 title: "EventStack - Event Management System"
 remote_theme: cepdnaclk/eYY-project-theme
-description: "EventStack is a full-stack event management platform with role-based access for Users, Organizers, and Admins. It supports event discovery, event creation, expense tracking, Budget Bot insights, and complete system administration."
-markdown: kramdown
+description: "EventStack is a full-stack event management platform with role-based access for Users, Organizers, and Admins. It supports event discovery, event creation, expense tracking, Budget Bot insights, and complete system administration."markdown: kramdown
 
 kramdown:
   parse_block_html: true
