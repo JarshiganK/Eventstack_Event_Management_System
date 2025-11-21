@@ -8,7 +8,7 @@ Full-stack event management • AI-powered budgeting • Real-time analytics
 
 ---
 
-## 🎯 What is this?
+## What is this?
 
 EventStack is a comprehensive full-stack event management platform designed to connect event organizers with attendees. It provides a complete suite of tools for managing events, tracking expenses, discovering activities, and engaging with attendees through intelligent features.
 
@@ -16,38 +16,38 @@ Built with modern web technologies and best practices, EventStack offers a seaml
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🔐 User Authentication
+### User Authentication
 - Secure registration and login for attendees and organizers
 - Role-based access control (Admin, Organizer, Attendee)
 - JWT-based authentication with secure token management
 
-### 📅 Event Management
+### Event Management
 - Admins can create, update, and manage event listings
 - Rich event details with image uploads
 - Event categorization and filtering
 - Venue management
 
-### 🔍 Event Discovery
+###  Event Discovery
 - Advanced search functionality
 - Browse and filter events by category, date, and location
 - Detailed event information pages
 - Bookmark favorite events
 
-### 💰 Expense Tracking
+### Expense Tracking
 - Organizers can manage event budgets
 - Track expenses with detailed records
 - Budget analysis and reporting
 - Financial dashboard for organizers
 
-### 🤖 AI-Powered Budget Bot
+### AI-Powered Budget Bot
 - Intelligent assistant for budget planning
 - Real-time budget recommendations
 - Integration with Google Gemini API
 - Smart expense categorization
 
-### 📊 Admin & Organizer Dashboards
+### Admin & Organizer Dashboards
 - Dedicated interfaces for managing events
 - Financial overview and analytics
 - User management capabilities
@@ -55,7 +55,7 @@ Built with modern web technologies and best practices, EventStack offers a seaml
 
 ---
 
-## 🏗️ How It Works
+## How It Works
 
 ### System Architecture
 
@@ -82,7 +82,7 @@ Built with modern web technologies and best practices, EventStack offers a seaml
 
 ---
 
-## 💻 Technology Stack
+## Technology Stack
 
 | Component | Technology |
 |-----------|-----------|
@@ -101,7 +101,7 @@ Built with modern web technologies and best practices, EventStack offers a seaml
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### One Command Deployment
 
@@ -120,9 +120,9 @@ Built with modern web technologies and best practices, EventStack offers a seaml
 
 ### Access Your System
 
-- 🌐 **Frontend**: http://localhost:5173
-- 🔌 **Backend API**: http://localhost:4000
-- 💾 **Database**: localhost:5432
+-  **Frontend**: http://localhost:5173
+-  **Backend API**: http://localhost:4000
+-  **Database**: localhost:5432
 
 **Automatic Cleanup**: Press `ENTER` when finished to stop all services, close windows, and optionally drop the database (unless `CTRL+C` is pressed to keep the database).
 
@@ -168,31 +168,31 @@ Built with modern web technologies and best practices, EventStack offers a seaml
 .\deploy-eventstack.ps1 -DbPassword "SecurePass" -JwtSecret "MySecretKey" -BackendPort 8080 -LoadSampleData
 ```
 
-📖 **Need more details?** Check the deployment guide for all available parameters and options.
+ **Need more details?** Check the deployment guide for all available parameters and options.
 
 ---
 
-## 📊 System Highlights
+##  System Highlights
 
-✅ **Production Ready** - Fully tested and deployment-ready
+ **Production Ready** - Fully tested and deployment-ready
 
-🧪 **Comprehensive Testing** - 60+ test files covering unit and integration tests
+ **Comprehensive Testing** - 60+ test files covering unit and integration tests
 
-📈 **High Code Coverage** - 89%+ coverage across frontend and backend
+ **High Code Coverage** - 89%+ coverage across frontend and backend
 
-🔒 **Secure** - JWT authentication, password hashing, input validation
+ **Secure** - JWT authentication, password hashing, input validation
 
-🎨 **Modern UI** - Responsive design for mobile and desktop
+ **Modern UI** - Responsive design for mobile and desktop
 
-⚡ **Fast & Efficient** - Fastify backend, Vite frontend build
+ **Fast & Efficient** - Fastify backend, Vite frontend build
 
-🔧 **Easy Setup** - Single-script automated deployment
+ **Easy Setup** - Single-script automated deployment
 
-📝 **Type Safe** - Full TypeScript implementation
+ **Type Safe** - Full TypeScript implementation
 
 ---
 
-## 🧪 Running Tests
+##  Running Tests
 
 Both packages are equipped with comprehensive test suites using Vitest.
 
@@ -230,7 +230,7 @@ Coverage reports are generated in the `coverage/` directory, and PDF reports are
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 eventstack/
@@ -249,7 +249,7 @@ eventstack/
 
 ---
 
-## 🔧 Manual Setup
+##  Manual Setup
 
 If you prefer to set up the project manually or are on a non-Windows system:
 
@@ -316,7 +316,7 @@ If you prefer to set up the project manually or are on a non-Windows system:
 ---
 
 
-## 🏛️ Academic Context
+##  Academic Context
 
 **Course**: Computer Engineering Project  
 **Institution**: University of Peradeniya  
